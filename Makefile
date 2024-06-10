@@ -31,7 +31,7 @@ SRC			:=	$(addprefix $(SRC_PATH)/, $(SRC_FILES))
 OBJ			:=	$(addprefix $(OBJ_PATH)/, $(OBJ_FILES))
 
 # ---------------------------------------- #
-CC+FLAGS	:=	cc -Wall -Werror -Wextra
+CC+FLAGS	:=	cc -Wall -Werror -Wextra -g3
 MLXFLAGS	:=	-lmlx -lXext -lX11
 RM			:=	rm -rf
 
