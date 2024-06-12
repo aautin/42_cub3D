@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/12 20:46:34 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/13 00:19:00 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,29 +34,32 @@
 #define	PLAYER_XPOS_INDEX		1
 #define	PLAYER_YPOS_INDEX		2
 
-void	modifyPlayerPos(int keycode, int *xPlayerPos, int *yPlayerPos)
+#define SCREEN_XSIZE_INDEX		3
+#define SCREEN_YSIZE_INDEX		4
+
+void	modifyPlayerPos(int keycode, void **params)
 {
-	
-	
-	*xPlayerPos -= (keycode == A_KEYCODE);
-	*xPlayerPos += (keycode == D_KEYCODE);
-	*yPlayerPos -= (keycode == W_KEYCODE);
-	*yPlayerPos += (keycode == S_KEYCODE);
+	int *xPlayerPos = params[PLAYER_XPOS_INDEX];
+	int *yPlayerPos = params[PLAYER_YPOS_INDEX];
+	int *xScreenSize = params[SCREEN_XSIZE_INDEX];
+	int *yScreenSize = params[SCREEN_YSIZE_INDEX];
+
+	*xPlayerPos -= (keycode == A_KEYCODE && *xPlayerPos > 0);
+	*xPlayerPos += (keycode == D_KEYCODE && *xPlayerPos < *xScreenSize);
+	*yPlayerPos -= (keycode == W_KEYCODE && *yPlayerPos > 0);
+	*yPlayerPos += (keycode == S_KEYCODE && *yPlayerPos < *yScreenSize);
 }
 
 int	keyHandlerEvent(int keycode, void **params)
 {
-	int *xPlayerPos = params[PLAYER_XPOS_INDEX];
-	int *yPlayerPos = params[PLAYER_YPOS_INDEX];
-	
+
 	if (keycode == ESC_KEYCODE)
 		mlx_loop_end(params[MLX_INDEX]);
 	else
 	{
-		modifyPlayerPos(keycode, xPlayerPos, yPlayerPos);
+		modifyPlayerPos(keycode, params);
 		ft_printf("player's position: %dx*%dy\n",
-			*xPlayerPos,
-			*yPlayerPos);
+				* (int *)params[PLAYER_XPOS_INDEX], * (int *)params[PLAYER_YPOS_INDEX]);
 	}
 	return (0);
 }
@@ -79,10 +82,12 @@ int	main(int argc, char **argv)
 
 	void *window = mlx_new_window(mlx, xScreenSize, yScreenSize, "cub3d: top_view");
 
-	void *params[3];
+	void *params[5];
 	params[MLX_INDEX] = mlx;
 	params[PLAYER_XPOS_INDEX] = &xPlayerPos;
 	params[PLAYER_YPOS_INDEX] = &yPlayerPos;
+	params[SCREEN_XSIZE_INDEX] = &xScreenSize;
+	params[SCREEN_YSIZE_INDEX] = &yScreenSize;
 
 	mlx_hook(window, DESTROY_WINDOW_EVENT, DESTROY_WINDOW_MASK, &mlx_loop_end, params);
 	mlx_hook(window, KEY_PRESSED_EVENT, KEY_PRESSED_MASK, &keyHandlerEvent, params);
