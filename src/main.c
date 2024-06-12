@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/12 14:44:17 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/12 14:47:23 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,11 @@ int	main(int argc, char **argv)
 
 	mlx_hook(window, DESTROY_WINDOW_EVENT, DESTROY_WINDOW_MASK, &mlx_loop_end, mlx);
 	mlx_hook(window, KEY_PRESSED_EVENT, KEY_PRESSED_MASK, &keyHandlerEvent, mlx);
+
+	int	xPlayerPos = xScreenSize / 2, yPlayerPos = yScreenSize / 2;
+	(void)	xPlayerPos;
+	(void)	yPlayerPos;
+
 	mlx_loop(mlx);
 
 	return 0;
