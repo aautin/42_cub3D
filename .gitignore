@@ -4,3 +4,5 @@ obj
 libft/.git
 mlx
 .vscode/
+*/*.a
+mlx/*.a
