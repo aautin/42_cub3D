@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/15 23:52:29 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/15 23:52:58 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include "mlx.h"
 #include "mlx_int.h"
 
+#define MAP_FILE_NAME			"simpleMap.cub"
+
+#define STEP_LENGHT				0.1
 #define DIR_LENGHT				1
 #define PLANE_LENGHT			2 * DIR_LENGHT
 // here "2 * DIR_LENGHT" sets a 90' FOV
@@ -31,56 +34,145 @@
 #define	S_KEYCODE_DOWN			115
 #define	W_KEYCODE_UP			119
 
-typedef struct s_windowConfig {
+typedef struct s_window {
 	void *obj;
 	int xSize;
 	int ySize;
-}	t_windowConfig;
-void	windowConfigInit(t_windowConfig *config, void *obj, int xSize, int ySize)
+}	t_window;
+void	initWindow(t_window *window, void *obj, int xSize, int ySize)
 {
-	config->obj = obj;
-	config->xSize = xSize;
-	config->ySize = ySize;
+	window->obj = obj;
+	window->xSize = xSize;
+	window->ySize = ySize;
 }
 
 typedef struct s_player {
 	int xPosition;
 	int yPosition;
-	int directionIndex;
+	float xDirection;
+	float yDirection;
+	float xCasePosition;
+	float yCasePosition;
 }	t_player;
-void	playerInit(t_player *player, int xPosition, int yPosition, int directionIndex)
+void	initPlayer(t_player *player, int xPosition, int yPosition)
 {
 	player->xPosition = xPosition;
 	player->yPosition = yPosition;
-	player->directionIndex = directionIndex;
+	player->xDirection = -1;
+	player->yDirection = 0;
+	player->xCasePosition = 0.5;
+	player->yCasePosition = 0.5;
 }
 
-typedef struct s_raycastingConfig {
-	int raysNumber;
-	char directions[16];
-}	t_raycastConfig;
-void	initRaycastConfig(t_raycastConfig *raycast, int raysNumber, char directions[16])
+typedef struct s_map {
+	char	**content;
+	int		xSize;
+	int		ySize;
+}	t_map;
+void	initMap(t_map *map, char *mapFileName)
 {
-	raycast->raysNumber = raysNumber;
-	raycast->directions = directions;
-}
+	int fd = open(mapFileName, O_RDONLY);
 
-void	modifyPlayerPosition(int keycode, void **params)
-{
-}
+	t_list *mapRows;
+	mapRows = NULL;
 
-int	keyHandlerEvent(int keycode, void **params)
-{
-
-	if (keycode == ESC_KEYCODE)
-		mlx_loop_end(params[MLX_INDEX]);
-	else
+	char *row = get_next_line(fd);
+	map->xSize = 0;
+	while (row)
 	{
-		modifyPlayerPosition(keycode, params);
-		ft_printf("player's position: %dx*%dy\n",
-				* (int *)params[PLAYER_XPOS_INDEX], * (int *)params[PLAYER_YPOS_INDEX]);
+		ft_lstadd_front(&mapRows, ft_lstnew(row));
+		map->xSize++;
+		row = get_next_line(fd);
 	}
-	return (0);
+	map->ySize = ft_strlen(mapRows->content);
+	map->content = malloc(map->xSize * sizeof(char *));
+
+	int rowIndex = 0;
+	while (rowIndex < map->xSize)
+	{
+		map->content[rowIndex] = mapRows->content;
+		mapRows = mapRows->next;
+		rowIndex++;
+	}
+}
+
+int	isKeycodeMakingPlayerMove(int keycode, t_map *map, t_player *player)
+{
+	int xPotentialPosition, yPotentialPosition;
+	switch (keycode)
+	{
+		case A_KEYCODE_LEFT :
+			xPotentialPosition = player->xPosition + (int)(player->xCasePosition + (player->yDirection * STEP_LENGHT));
+			yPotentialPosition = player->yPosition + (int)(player->yCasePosition + (player->xDirection * STEP_LENGHT));
+			break;
+		case D_KEYCODE_RIGHT :
+			xPotentialPosition = player->xPosition + (int)(player->xCasePosition - (player->yDirection * STEP_LENGHT));
+			yPotentialPosition = player->yPosition + (int)(player->yCasePosition - (player->xDirection * STEP_LENGHT));
+			break;
+		case W_KEYCODE_UP :
+			xPotentialPosition = player->xPosition + (int)(player->xCasePosition + (player->xDirection * STEP_LENGHT));
+			yPotentialPosition = player->yPosition + (int)(player->yCasePosition + (player->yDirection * STEP_LENGHT));
+			break;
+		case S_KEYCODE_DOWN :
+			xPotentialPosition = player->xPosition + (int)(player->xCasePosition - (player->xDirection * STEP_LENGHT));
+			yPotentialPosition = player->yPosition + (int)(player->yCasePosition - (player->yDirection * STEP_LENGHT));
+			break;
+		default :
+			xPotentialPosition = player->xPosition;
+			yPotentialPosition = player->yPosition;
+			break;
+	}
+	return map->content[yPotentialPosition][xPotentialPosition] == '0';
+}
+
+void	modifyPlayerPosition(int keycode, t_player *player)
+{
+	switch (keycode)
+	{
+		case A_KEYCODE_LEFT :
+			player->xPosition -= player;
+			player->xCasePosition = (player->xCasePosition + (player->yDirection * STEP_LENGHT)) - 1;
+			player->xCasePosition = (player->yCasePosition + (player->xDirection * STEP_LENGHT)) - 1;
+			break;
+		case D_KEYCODE_RIGHT :
+			player->xPosition++;
+			player->xCasePosition = (player->xCasePosition + (player->xDirection * STEP_LENGHT)) - 1;
+			break;
+		case W_KEYCODE_UP :
+			player->yPosition--;
+			break;
+		case S_KEYCODE_DOWN :
+			player->yPosition++;
+			break;
+		default :
+			break;
+	}
+}
+
+typedef struct s_keyHandlerParam {
+	t_window	*window;
+	t_player	*player;
+	t_map		*map;
+	void		*mlx;
+}	t_keyHandlerParam;
+void	initKeyHandlerParam(t_keyHandlerParam *param, t_window *window, t_map *map, t_player *player, void *mlx)
+{
+	param->window = window;
+	param->player = player;
+	param->map = map;
+	param->mlx = mlx;
+}
+int	keyHandler(int keycode, t_keyHandlerParam *param)
+{	
+	if (keycode == ESC_KEYCODE)
+		mlx_loop_end(param->mlx);
+	else if (isKeycodeMakingPlayerMove(keycode, param->map, param->player))
+	{
+		modifyPlayerPosition(keycode, param->player);
+		ft_printf("player's position: %dx*%dy\n",
+				param->player->xPosition, param->player->yPosition);
+	}
+	return 0;
 }
 
 int	main(int argc, char **argv)
@@ -97,26 +189,22 @@ int	main(int argc, char **argv)
 	if (xScreenSize <= DIR_LENGHT * 2 || yScreenSize <= DIR_LENGHT * 2)
 		return 0;
 
-	int	xPlayerPosition = , yPlayerPosition = yScreenSize / 2;
+	void *windowObj = mlx_new_window(mlx, xScreenSize, yScreenSize, "cub3d: top_view");
 
-	void *window = mlx_new_window(mlx, xScreenSize, yScreenSize, "cub3d: top_view");
+	t_window window;
+	initWindow(&window, windowObj, xScreenSize, yScreenSize);
 
-	t_windowConfig config;
-	windowConfigInit(&config, window, xScreenSize, yScreenSize);
+	t_map map;
+	initMap(&map, MAP_FILE_NAME);
 
 	t_player player;
-	playerInit(&player, config.xSize / 2, config.ySize / 2, 0);
+	initPlayer(&player, map.xSize / 2, map.ySize / 2);
 
-	
-	void *params[3];
-	params[MLX_INDEX] = mlx;
-	params[PLAYER_XPOS_INDEX] = &xPlayerPosition;
-	params[PLAYER_YPOS_INDEX] = &yPlayerPosition;
-	params[WINDOW_XSIZE_INDEX] = &xScreenSize;
-	params[WINDOW_YSIZE_INDEX] = &yScreenSize;
+	t_keyHandlerParam param;
+	initKeyHandlerParam(&param, &window, &player, mlx);
 
-	mlx_hook(window, DESTROY_WINDOW_EVENT, DESTROY_WINDOW_MASK, &mlx_loop_end, params);
-	mlx_hook(window, KEY_PRESSED_EVENT, KEY_PRESSED_MASK, &keyHandlerEvent, params);
+	mlx_hook(window.obj, KEY_PRESSED_EVENT, KEY_PRESSED_MASK, &keyHandler, &param);
+	mlx_hook(window.obj, DESTROY_WINDOW_EVENT, DESTROY_WINDOW_MASK, &mlx_loop_end, mlx);
 
 	mlx_loop(mlx);
 
