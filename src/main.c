@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/15 23:51:56 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/15 23:52:29 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,24 +31,42 @@
 #define	S_KEYCODE_DOWN			115
 #define	W_KEYCODE_UP			119
 
-#define	MLX_INDEX				0
-#define	PLAYER_XPOS_INDEX		1
-#define	PLAYER_YPOS_INDEX		2
+typedef struct s_windowConfig {
+	void *obj;
+	int xSize;
+	int ySize;
+}	t_windowConfig;
+void	windowConfigInit(t_windowConfig *config, void *obj, int xSize, int ySize)
+{
+	config->obj = obj;
+	config->xSize = xSize;
+	config->ySize = ySize;
+}
 
-#define WINDOW_XSIZE_INDEX		3
-#define WINDOW_YSIZE_INDEX		4
+typedef struct s_player {
+	int xPosition;
+	int yPosition;
+	int directionIndex;
+}	t_player;
+void	playerInit(t_player *player, int xPosition, int yPosition, int directionIndex)
+{
+	player->xPosition = xPosition;
+	player->yPosition = yPosition;
+	player->directionIndex = directionIndex;
+}
+
+typedef struct s_raycastingConfig {
+	int raysNumber;
+	char directions[16];
+}	t_raycastConfig;
+void	initRaycastConfig(t_raycastConfig *raycast, int raysNumber, char directions[16])
+{
+	raycast->raysNumber = raysNumber;
+	raycast->directions = directions;
+}
 
 void	modifyPlayerPosition(int keycode, void **params)
 {
-	int *xPlayerPosition = params[PLAYER_XPOS_INDEX];
-	int *yPlayerPosition = params[PLAYER_YPOS_INDEX];
-	int *xScreenSize = params[WINDOW_XSIZE_INDEX];
-	int *yScreenSize = params[WINDOW_YSIZE_INDEX];
-
-	*xPlayerPosition -= (keycode == A_KEYCODE && *xPlayerPosition > 0);
-	*xPlayerPosition += (keycode == D_KEYCODE && *xPlayerPosition < *xScreenSize);
-	*yPlayerPosition -= (keycode == W_KEYCODE && *yPlayerPosition > 0);
-	*yPlayerPosition += (keycode == S_KEYCODE && *yPlayerPosition < *yScreenSize);
 }
 
 int	keyHandlerEvent(int keycode, void **params)
@@ -72,18 +90,25 @@ int	main(int argc, char **argv)
 
 	void *mlx = mlx_init();
 	if (mlx == NULL)
-		return (1);
+		return 1;
 
 	int	xScreenSize, yScreenSize;
 	mlx_get_screen_size(mlx, &xScreenSize, &yScreenSize);
 	if (xScreenSize <= DIR_LENGHT * 2 || yScreenSize <= DIR_LENGHT * 2)
 		return 0;
 
-	int	xPlayerPosition = xScreenSize / 2, yPlayerPosition = yScreenSize / 2;
+	int	xPlayerPosition = , yPlayerPosition = yScreenSize / 2;
 
 	void *window = mlx_new_window(mlx, xScreenSize, yScreenSize, "cub3d: top_view");
 
-	void *params[5];
+	t_windowConfig config;
+	windowConfigInit(&config, window, xScreenSize, yScreenSize);
+
+	t_player player;
+	playerInit(&player, config.xSize / 2, config.ySize / 2, 0);
+
+	
+	void *params[3];
 	params[MLX_INDEX] = mlx;
 	params[PLAYER_XPOS_INDEX] = &xPlayerPosition;
 	params[PLAYER_YPOS_INDEX] = &yPlayerPosition;
