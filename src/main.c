@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
+/*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/15 23:52:58 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/16 20:45:36 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@
 
 #define ESC_KEYCODE				65307
 
+#define NORTH					'N'
+#define SOUTH					'S'
+#define WEST					'W'
+#define EAST					'E'
+
 #define	A_KEYCODE_LEFT			97
 #define	D_KEYCODE_RIGHT			100
 #define	S_KEYCODE_DOWN			115
@@ -46,24 +51,6 @@ void	initWindow(t_window *window, void *obj, int xSize, int ySize)
 	window->ySize = ySize;
 }
 
-typedef struct s_player {
-	int xPosition;
-	int yPosition;
-	float xDirection;
-	float yDirection;
-	float xCasePosition;
-	float yCasePosition;
-}	t_player;
-void	initPlayer(t_player *player, int xPosition, int yPosition)
-{
-	player->xPosition = xPosition;
-	player->yPosition = yPosition;
-	player->xDirection = -1;
-	player->yDirection = 0;
-	player->xCasePosition = 0.5;
-	player->yCasePosition = 0.5;
-}
-
 typedef struct s_map {
 	char	**content;
 	int		xSize;
@@ -77,52 +64,102 @@ void	initMap(t_map *map, char *mapFileName)
 	mapRows = NULL;
 
 	char *row = get_next_line(fd);
-	map->xSize = 0;
+	map->ySize = 0;
 	while (row)
 	{
 		ft_lstadd_front(&mapRows, ft_lstnew(row));
-		map->xSize++;
+		map->ySize++;
 		row = get_next_line(fd);
 	}
-	map->ySize = ft_strlen(mapRows->content);
-	map->content = malloc(map->xSize * sizeof(char *));
+	map->xSize = ft_strlen(mapRows->content) - 1;
+	map->content = malloc(map->ySize * sizeof(char *));
 
 	int rowIndex = 0;
-	while (rowIndex < map->xSize)
+	while (rowIndex < map->ySize)
 	{
 		map->content[rowIndex] = mapRows->content;
+		map->content[rowIndex][map->xSize - 1] = '\0';
 		mapRows = mapRows->next;
 		rowIndex++;
 	}
 }
 
+typedef struct s_player {
+	int xPosition;
+	int yPosition;
+	float xDirection;
+	float yDirection;
+	float xCasePosition;
+	float yCasePosition;
+}	t_player;
+void	initPlayerPosition(t_player *player, t_map *map)
+{
+	int	rowI = 0;
+	while (rowI < map->ySize)
+	{
+		int	columnI = 0;
+		while (columnI < map->xSize)
+		{
+			if (ft_strchr("01", map->content[rowI][columnI]) == NULL)	
+			{
+				player->xPosition = rowI;
+				player->yPosition = columnI;
+				return ;
+			}
+			columnI++;
+		}
+		rowI++;
+	}
+}
+void	initPlayerDirection(t_player *player, int direction)
+{
+	if (direction == NORTH)
+	{
+		player->xDirection = -1;
+		player->yDirection = 0;	
+	}
+	else if (direction == SOUTH)
+	{
+		player->xDirection = 1;
+		player->yDirection = 0;	
+	}
+	else if (direction == WEST)
+	{
+		player->xDirection = 0;
+		player->yDirection = -1;	
+	}
+	else if (direction == EAST)
+	{
+		player->xDirection = 0;
+		player->yDirection = 1;	
+	}
+}
+void	initPlayer(t_player *player, t_map *map)
+{
+	initPlayerPosition(player, map);
+	initPlayerDirection(player, map->content[player->yPosition][player->xPosition]);
+	player->xCasePosition = 0.5;
+	player->yCasePosition = 0.5;
+}
+
 int	isKeycodeMakingPlayerMove(int keycode, t_map *map, t_player *player)
 {
-	int xPotentialPosition, yPotentialPosition;
 	switch (keycode)
 	{
 		case A_KEYCODE_LEFT :
-			xPotentialPosition = player->xPosition + (int)(player->xCasePosition + (player->yDirection * STEP_LENGHT));
-			yPotentialPosition = player->yPosition + (int)(player->yCasePosition + (player->xDirection * STEP_LENGHT));
 			break;
 		case D_KEYCODE_RIGHT :
-			xPotentialPosition = player->xPosition + (int)(player->xCasePosition - (player->yDirection * STEP_LENGHT));
-			yPotentialPosition = player->yPosition + (int)(player->yCasePosition - (player->xDirection * STEP_LENGHT));
 			break;
 		case W_KEYCODE_UP :
-			xPotentialPosition = player->xPosition + (int)(player->xCasePosition + (player->xDirection * STEP_LENGHT));
-			yPotentialPosition = player->yPosition + (int)(player->yCasePosition + (player->yDirection * STEP_LENGHT));
 			break;
 		case S_KEYCODE_DOWN :
-			xPotentialPosition = player->xPosition + (int)(player->xCasePosition - (player->xDirection * STEP_LENGHT));
-			yPotentialPosition = player->yPosition + (int)(player->yCasePosition - (player->yDirection * STEP_LENGHT));
 			break;
 		default :
-			xPotentialPosition = player->xPosition;
-			yPotentialPosition = player->yPosition;
 			break;
 	}
-	return map->content[yPotentialPosition][xPotentialPosition] == '0';
+	(void) map;
+	(void) player;
+	return 0;
 }
 
 void	modifyPlayerPosition(int keycode, t_player *player)
@@ -130,23 +167,17 @@ void	modifyPlayerPosition(int keycode, t_player *player)
 	switch (keycode)
 	{
 		case A_KEYCODE_LEFT :
-			player->xPosition -= player;
-			player->xCasePosition = (player->xCasePosition + (player->yDirection * STEP_LENGHT)) - 1;
-			player->xCasePosition = (player->yCasePosition + (player->xDirection * STEP_LENGHT)) - 1;
 			break;
 		case D_KEYCODE_RIGHT :
-			player->xPosition++;
-			player->xCasePosition = (player->xCasePosition + (player->xDirection * STEP_LENGHT)) - 1;
 			break;
 		case W_KEYCODE_UP :
-			player->yPosition--;
 			break;
 		case S_KEYCODE_DOWN :
-			player->yPosition++;
 			break;
 		default :
 			break;
 	}
+	(void) player;
 }
 
 typedef struct s_keyHandlerParam {
@@ -198,10 +229,10 @@ int	main(int argc, char **argv)
 	initMap(&map, MAP_FILE_NAME);
 
 	t_player player;
-	initPlayer(&player, map.xSize / 2, map.ySize / 2);
+	initPlayer(&player, &map);
 
 	t_keyHandlerParam param;
-	initKeyHandlerParam(&param, &window, &player, mlx);
+	initKeyHandlerParam(&param, &window, &map, &player, mlx);
 
 	mlx_hook(window.obj, KEY_PRESSED_EVENT, KEY_PRESSED_MASK, &keyHandler, &param);
 	mlx_hook(window.obj, DESTROY_WINDOW_EVENT, DESTROY_WINDOW_MASK, &mlx_loop_end, mlx);
