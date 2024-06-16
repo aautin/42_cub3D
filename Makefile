@@ -24,7 +24,12 @@ MLX			:=	$(MLX_PATH)/libmlx.a
 MLX_NAME	:=	mlx
 
 SRC_FILES	:=	\
-				main.c
+				main.c		\
+				hook.c		\
+				map.c		\
+				player.c	\
+				window.c	\
+
 OBJ_FILES	:=	$(SRC_FILES:.c=.o)
 
 SRC			:=	$(addprefix $(SRC_PATH)/, $(SRC_FILES))
