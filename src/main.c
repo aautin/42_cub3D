@@ -6,7 +6,7 @@
 /*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/16 20:45:36 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/16 23:12:15 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,8 @@ void	initPlayerPosition(t_player *player, t_map *map)
 		{
 			if (ft_strchr("01", map->content[rowI][columnI]) == NULL)	
 			{
-				player->xPosition = rowI;
-				player->yPosition = columnI;
+				player->xPosition = columnI;
+				player->yPosition = rowI;
 				return ;
 			}
 			columnI++;
@@ -116,22 +116,22 @@ void	initPlayerDirection(t_player *player, int direction)
 	if (direction == NORTH)
 	{
 		player->xDirection = -1;
-		player->yDirection = 0;	
+		player->yDirection = 0;
 	}
 	else if (direction == SOUTH)
 	{
 		player->xDirection = 1;
-		player->yDirection = 0;	
+		player->yDirection = 0;
 	}
 	else if (direction == WEST)
 	{
 		player->xDirection = 0;
-		player->yDirection = -1;	
+		player->yDirection = -1;
 	}
 	else if (direction == EAST)
 	{
 		player->xDirection = 0;
-		player->yDirection = 1;	
+		player->yDirection = 1;
 	}
 }
 void	initPlayer(t_player *player, t_map *map)
@@ -144,40 +144,43 @@ void	initPlayer(t_player *player, t_map *map)
 
 int	isKeycodeMakingPlayerMove(int keycode, t_map *map, t_player *player)
 {
+	(void) map;
+	(void) player;
 	switch (keycode)
 	{
 		case A_KEYCODE_LEFT :
-			break;
+			return 1;
 		case D_KEYCODE_RIGHT :
-			break;
+			return 1;
 		case W_KEYCODE_UP :
-			break;
+			return 1;
 		case S_KEYCODE_DOWN :
-			break;
+			return 1;
 		default :
-			break;
+			return 0;
 	}
-	(void) map;
-	(void) player;
-	return 0;
 }
 
 void	modifyPlayerPosition(int keycode, t_player *player)
 {
+	(void) player;
 	switch (keycode)
 	{
 		case A_KEYCODE_LEFT :
+			ft_printf("LEFT->");
 			break;
 		case D_KEYCODE_RIGHT :
+			ft_printf("RIGHT->");
 			break;
 		case W_KEYCODE_UP :
+			ft_printf("UP->");
 			break;
 		case S_KEYCODE_DOWN :
+			ft_printf("DOWN->");
 			break;
 		default :
 			break;
 	}
-	(void) player;
 }
 
 typedef struct s_keyHandlerParam {
@@ -200,8 +203,10 @@ int	keyHandler(int keycode, t_keyHandlerParam *param)
 	else if (isKeycodeMakingPlayerMove(keycode, param->map, param->player))
 	{
 		modifyPlayerPosition(keycode, param->player);
-		ft_printf("player's position: %dx*%dy\n",
-				param->player->xPosition, param->player->yPosition);
+		ft_printf("new position: %d.%dx*%d.%dy\n",	param->player->xPosition,
+													(int)(param->player->xCasePosition * 10),
+													param->player->yPosition,
+													(int)(param->player->yCasePosition * 10));
 	}
 	return 0;
 }
