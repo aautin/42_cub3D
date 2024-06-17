@@ -39,14 +39,13 @@ OBJ			:=	$(addprefix $(OBJ_PATH)/, $(OBJ_FILES))
 CC+FLAGS	:=	cc -Wall -Werror -Wextra -g3
 MLXFLAGS	:=	-lmlx -lXext -lX11
 RM			:=	rm -rf
-
 # ---------------------------------------- #
 $(NAME)			:	$(MLX) $(LIBFT) $(OBJ_PATH) $(OBJ)
 					@$(CC+FLAGS) $(OBJ) -o $@ -L$(LIBFT_PATH) -l$(LIBFT_NAME) -L$(MLX_PATH) -l$(MLX_NAME) $(MLXFLAGS)
 					@echo "$(CYAN)Successfully linked the objects into $(ORANGE)$(NAME)"
 
 $(OBJ_PATH)		:
-					@mkdir $(OBJ_PATH)
+					@mkdir -p $(OBJ_PATH)
 
 $(OBJ_PATH)/%.o	:	$(SRC_PATH)/%.c
 					@$(CC+FLAGS) -c $< -o $@ -I$(LIBFT_INC) -I$(MLX_INC) -I$(INC_PATH)
@@ -59,30 +58,37 @@ $(LIBFT)		:	$(LIBFT_PATH)
 					@make -s -C $(LIBFT_PATH)
 
 $(MLX_PATH)		:	$(MLX_TGZ)
-					@tar -x -f mlx.tgz
-
+					@if [ ! -d "$(MLX_PATH)" ]; then \
+						tar -x -f $(MLX_TGZ); \
+						echo "$(GREEN)Extracted $(PURPLE)$(MLX_TGZ)$(DEFAULT)"; \
+					fi
 # ---------------------------------------- #
-all				:	$(MLX_TGZ) $(NAME)
+.PHONY			:	clean cleanobj cleanlibs fclean re
 
-clean			:	cleanlibs
+all				:	$(NAME)
+
+clean			:	cleanobj cleanlibs
+
+cleanobj		:
 					@$(RM) $(OBJ_PATH)
-					@echo "$(RED)Removed the objects"
+					@echo "$(RED)Removed $(BLUE)$(NAME)$(RED) objects$(DEFAULT)"
 
 cleanlibs		:
 					@if [ -d "libft" ]; then \
 						make clean -s -C libft; \
 					fi
+					@echo "$(RED)Removed $(BLUE)$(LIBFT_PATH)$(RED) objects$(DEFAULT)"
 					@if [ -d "mlx" ]; then \
 						make clean -s -C mlx; \
 					fi
+					@echo "$(RED)Removed $(BLUE)$(MLX_PATH)$(RED) objects$(DEFAULT)"
 
 fclean			:	clean
 					@$(RM) $(NAME)
-					@echo "$(RED)Removed $(BLUE)$(NAME)"
-
-ffclean			:	fclean
+					@echo "$(RED)Removed $(BLUE)$(NAME)$(DEFAULT)"
 					@if [ -d "mlx" ]; then \
 						$(RM) mlx; \
+						echo "$(RED)Removed $(BLUE)$(MLX_PATH)$(RED) library$(DEFAULT)"; \
 					fi
 
 re				:	fclean all
