@@ -6,7 +6,7 @@
 /*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/16 23:40:03 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/18 02:03:37 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ void	initMap(t_map *map, char *mapFileName)
 		row = get_next_line(fd);
 	}
 	map->xSize = ft_strlen(mapRows->content) - 1;
-	map->content = malloc(map->ySize * sizeof(char *));
+	map->area = malloc(map->ySize * sizeof(char *));
 
 	int rowIndex = 0;
 	while (rowIndex < map->ySize)
 	{
-		map->content[rowIndex] = mapRows->content;
-		map->content[rowIndex][map->xSize - 1] = '\0';
+		map->area[rowIndex] = mapRows->content;
+		map->area[rowIndex][map->xSize - 1] = '\0';
 		mapRows = mapRows->next;
 		rowIndex++;
 	}

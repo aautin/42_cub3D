@@ -6,7 +6,7 @@
 /*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:41:18 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/17 01:23:30 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/18 02:05:19 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	initPlayerPosition(t_player *player, t_map *map)
 		int	columnI = 0;
 		while (columnI < map->xSize)
 		{
-			if (ft_strchr("01", map->content[rowI][columnI]) == NULL)	
+			if (ft_strchr("01", map->area[rowI][columnI]) == NULL)	
 			{
 				player->xPosition = columnI;
 				player->yPosition = rowI;
@@ -62,7 +62,7 @@ static void	initPlayerDirection(t_player *player, int direction)
 void	initPlayer(t_player *player, t_map *map)
 {
 	initPlayerPosition(player, map);
-	initPlayerDirection(player, map->content[player->yPosition][player->xPosition]);
+	initPlayerDirection(player, map->area[player->yPosition][player->xPosition]);
 	player->xCasePosition = 0.5;
 	player->yCasePosition = 0.5;
 }
