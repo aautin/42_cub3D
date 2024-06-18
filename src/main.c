@@ -6,7 +6,7 @@
 /*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/18 02:12:56 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/18 11:30:48 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 #define PLANE_LENGHT	2 * DIR_LENGHT
 // here "2 * DIR_LENGHT" sets a 90' FOV
 
-static void	initKeyHandlerParam(t_keyHandlerParam *param, t_window *window, t_map *map, t_player *player, void *mlx)
+static void	initKeyHandlerParam(t_keyHandlerParam *param, t_window *window, t_formattedMap *map, t_player *player, void *mlx)
 {
 	param->window = window;
 	param->player = player;
@@ -33,7 +33,7 @@ static void	initKeyHandlerParam(t_keyHandlerParam *param, t_window *window, t_ma
 	param->mlx = mlx;
 }
 
-int	isKeycodeMakingPlayerMove(int keycode, t_map *map, t_player *player)
+int	isKeycodeMakingPlayerMove(int keycode, t_formattedMap *map, t_player *player)
 {
 	(void) map;
 	(void) player;
@@ -81,20 +81,34 @@ int	main(int argc, char **argv)
 
 	void *mlx = mlx_init();
 	if (mlx == NULL)
-		return 1;
+	{
+		perror("main():mlx_init()");
+		return EXIT_FAILURE;
+	}
 
 	int	xScreenSize, yScreenSize;
 	mlx_get_screen_size(mlx, &xScreenSize, &yScreenSize);
 	if (xScreenSize <= DIR_LENGHT * 2 || yScreenSize <= DIR_LENGHT * 2)
-		return 0;
+	{
+		ft_printf("Screen size isn't adapted for this program.\n");
+		return EXIT_SUCCESS;
+	}
 
-	void *windowObj = mlx_new_window(mlx, xScreenSize, yScreenSize, "cub3D");
+	t_formattedMap map;
+	if (initMap(&map, argv[1]) == EXIT_FAILURE)
+	{
+		mlx_destroy_display(mlx);
+		free(mlx);
+		return EXIT_FAILURE;
+	}
 
 	t_window window;
-	initWindow(&window, windowObj, xScreenSize, yScreenSize);
-
-	t_map map;
-	initMap(&map, argv[1]);
+	if (initWindow(&window, mlx, xScreenSize, yScreenSize) == EXIT_FAILURE)
+	{
+		// free map
+		mlx_destroy_display(mlx);
+		return EXIT_FAILURE;
+	}
 
 	t_player player;
 	initPlayer(&player, &map);
@@ -104,5 +118,5 @@ int	main(int argc, char **argv)
 	setWindowHooks(&keyHandlerParam);
 	mlx_loop(mlx);
 
-	return 0;
+	return EXIT_SUCCESS;
 }

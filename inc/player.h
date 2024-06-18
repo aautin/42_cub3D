@@ -6,7 +6,7 @@
 /*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:42:11 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/17 01:02:53 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/18 11:30:48 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,6 @@ typedef struct s_player {
 	float yCasePosition;
 }	t_player;
 
-void	initPlayer(t_player *player, t_map *map);
+void	initPlayer(t_player *player, t_formattedMap *map);
 
 #endif

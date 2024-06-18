@@ -6,7 +6,7 @@
 /*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/18 02:11:50 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/18 11:30:56 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ typedef struct s_rgb {
 	unsigned char	bCode;
 }	t_rgb;
 
-typedef struct s_rawData {
-	t_list	*dataElements;
-	char	*dataBlock;
+typedef struct s_identifiedMap {
 	char	**texturesFilename;
-}	t_rawData;
+	char	**area;
+	char	*floarCode;
+	char	*ceilingCode;
+}	t_identifiedMap;
 
 typedef struct s_map {
-	t_rawData	parsing;
 	char		**texturesXpm;
 	char		**area;
 	t_rgb		floarCode;
@@ -41,8 +41,10 @@ typedef struct s_map {
 	char		**xmp;
 	int			xSize;
 	int			ySize;
-}	t_map;
+}	t_formattedMap;
 
-void	initMap(t_map *map, char *mapFileName);
+
+int	initIdentifiedMap(t_identifiedMap *identifiedMap, char *mapFileName);
+int	initMap(t_formattedMap *map, char *mapFileName);
 
 #endif

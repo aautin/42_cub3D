@@ -6,7 +6,7 @@
 /*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 00:57:01 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/18 02:12:37 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/18 11:30:48 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 typedef struct s_keyHandlerParam {
 	t_window	*window;
-	t_map		*map;
+	t_formattedMap		*map;
 	t_player	*player;
 	void		*mlx;
 }	t_keyHandlerParam;

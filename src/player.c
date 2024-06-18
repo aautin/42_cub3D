@@ -6,7 +6,7 @@
 /*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:41:18 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/18 02:09:10 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/18 11:30:48 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "map.h"
 #include "player.h"
 
-static void	initPlayerPosition(t_player *player, t_map *map)
+static void	initPlayerPosition(t_player *player, t_formattedMap *map)
 {
 	int	rowI = 0;
 	while (rowI < map->ySize)
@@ -59,7 +59,7 @@ static void	initPlayerDirection(t_player *player, int direction)
 	}
 }
 
-void	initPlayer(t_player *player, t_map *map)
+void	initPlayer(t_player *player, t_formattedMap *map)
 {
 	initPlayerPosition(player, map);
 	initPlayerDirection(player, map->area[player->yPosition][player->xPosition]);

@@ -24,11 +24,12 @@ MLX			:=	$(MLX_PATH)/libmlx.a
 MLX_NAME	:=	mlx
 
 SRC_FILES	:=	\
-				main.c		\
-				hook.c		\
-				map.c		\
-				player.c	\
-				window.c	\
+				main.c			\
+				hook.c			\
+				formattedMap.c	\
+				identifiedMap.c	\
+				player.c		\
+				window.c		\
 
 OBJ_FILES	:=	$(SRC_FILES:.c=.o)
 
@@ -42,14 +43,14 @@ RM			:=	rm -rf
 # ---------------------------------------- #
 $(NAME)			:	$(MLX) $(LIBFT) $(OBJ_PATH) $(OBJ)
 					@$(CC+FLAGS) $(OBJ) -o $@ -L$(LIBFT_PATH) -l$(LIBFT_NAME) -L$(MLX_PATH) -l$(MLX_NAME) $(MLXFLAGS)
-					@echo "$(CYAN)Successfully linked the objects into $(ORANGE)$(NAME)"
+					@echo "$(CYAN)Successfully linked the objects into $(ORANGE)$(NAME)$(DEFAULT)"
 
 $(OBJ_PATH)		:
 					@mkdir -p $(OBJ_PATH)
 
 $(OBJ_PATH)/%.o	:	$(SRC_PATH)/%.c
 					@$(CC+FLAGS) -c $< -o $@ -I$(LIBFT_INC) -I$(MLX_INC) -I$(INC_PATH)
-					@echo "$(GREEN)Compiled $(PURPLE)$<"
+					@echo "$(GREEN)Compiled $(PURPLE)$<$(DEFAULT)"
 
 $(MLX)			:	$(MLX_PATH)
 					@make -s -C $(MLX_PATH)
