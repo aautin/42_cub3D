@@ -6,11 +6,11 @@
 /*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 01:07:10 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/17 01:46:33 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/18 02:08:39 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft_extended.h"
+#include "ft_printf.h"
 #include "mlx_int.h"
 #include "mlx.h"
 

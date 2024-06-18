@@ -6,11 +6,11 @@
 /*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:41:18 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/18 02:05:19 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/18 02:09:10 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft_extended.h"
+#include "libft.h"
 
 #include "map.h"
 #include "player.h"

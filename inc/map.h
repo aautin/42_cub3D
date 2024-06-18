@@ -6,12 +6,14 @@
 /*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/18 02:03:26 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/18 02:11:50 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_H
 # define MAP_H
+
+# include "libft.h"
 
 # define	NORTH_INDEX
 # define	SOUTH_INDEX

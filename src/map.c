@@ -6,11 +6,12 @@
 /*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/18 02:03:37 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/18 02:07:05 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft_extended.h"
+#include "libft.h"
+#include "get_next_line.h"
 #include "map.h"
 
 void	initMap(t_map *map, char *mapFileName)
