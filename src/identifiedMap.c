@@ -6,7 +6,7 @@
 /*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/18 11:36:07 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/18 14:46:52 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,10 @@ static int	initDataBlock(char *dataBlock[], int fd)
 		*dataBlock = get_next_line(fd);
 	}
 
-	int	dataBlockSize = 1;
-	for (t_list *ptr = dataElements; ptr != NULL; ptr = ptr->next)
-		dataBlockSize += ft_strlen(ptr->content);
-	*dataBlock = ft_calloc(dataBlockSize, sizeof(char));
-	if (*dataBlock == NULL)
-	{
-		ft_lstclear(&dataElements, &free);
-		return EXIT_FAILURE;
-	}
-	for (t_list *ptr = dataElements; ptr != NULL; ptr = ptr->next)
-		ft_strlcat(*dataBlock, ptr->content, dataBlockSize);
+	*dataBlock = lsttostr(dataElements);
 	ft_lstclear(&dataElements, &free);
+	if (*dataBlock == NULL)
+		return EXIT_FAILURE;
 	return EXIT_SUCCESS;
 }
 

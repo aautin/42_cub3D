@@ -78,7 +78,6 @@ cleanlibs		:
 					@if [ -d "libft" ]; then \
 						make clean -s -C libft; \
 					fi
-					@echo "$(RED)Removed $(BLUE)$(LIBFT_PATH)$(RED) objects$(DEFAULT)"
 					@if [ -d "mlx" ]; then \
 						make clean -s -C mlx; \
 					fi
