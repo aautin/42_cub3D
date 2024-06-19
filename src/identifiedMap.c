@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/19 22:37:20 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/20 00:17:43 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,11 @@ static int	identifyMap(t_identifiedMap *map, char **lines)
 		int	j = 0;
 		int	newStatus = 0;
 		while (lines[i][j] == ' ')
-			i++;
+			j++;
 		if (seemToBeCode(&lines[i][j]))
 			newStatus = identifyCode(map, &lines[i][j + 1], lines[i][j]);
 		else if (seemToBeTexture(&lines[i][j]))
-			newStatus = identifyTexture(map, &lines[i][j]);
+			newStatus = identifyTexture(map, &lines[i][j + 2], lines[i][j], lines[i][j + 1]);
 		else if (seemToBeArea(lines[i][j]))
 		{
 			map->mapStartIndex = i;
@@ -85,6 +85,8 @@ static int	identifyMap(t_identifiedMap *map, char **lines)
 		status |= newStatus;
 		i++;
 	}
+	if (lines[i] == NULL && status != COMPLETE && map->mapStartIndex != NOT_FOUND)
+		printf("The given file is incomplete\n");
 	return status;
 }
 

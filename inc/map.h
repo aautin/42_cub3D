@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/19 22:42:05 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/19 23:39:47 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int		seemToBeCode(char *line);
 int		seemToBeTexture(char *line);
 int		seemToBeArea(char letter);
 int		identifyCode(t_identifiedMap *map, char *line, int letter);
-int		identifyTexture(t_identifiedMap *map, char *line);
+int		identifyTexture(t_identifiedMap *map, char *line, int letter, int nextLetter);
 
 void	freeIdentifiedMap(t_identifiedMap *map, int status);
 int		initIdentifiedMap(t_identifiedMap *identifiedMap, char *mapFileName);
