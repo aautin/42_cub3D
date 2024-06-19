@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 13:26:06 by aautin            #+#    #+#             */
-/*   Updated: 2024/01/05 18:26:18 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/19 19:16:54 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }				t_list;
+
+# define TRUE	1
+# define FALSE	0
 
 t_list		*ft_lstnew(void *content);
 t_list		*ft_lstlast(t_list *lst);
