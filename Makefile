@@ -24,12 +24,13 @@ MLX			:=	$(MLX_PATH)/libmlx.a
 MLX_NAME	:=	mlx
 
 SRC_FILES	:=	\
-				main.c			\
-				hook.c			\
-				formattedMap.c	\
-				identifiedMap.c	\
-				player.c		\
-				window.c		\
+				main.c				\
+				hook.c				\
+				formattedMap.c		\
+				identifiedParts.c	\
+				identifiedMap.c		\
+				player.c			\
+				window.c			\
 
 OBJ_FILES	:=	$(SRC_FILES:.c=.o)
 

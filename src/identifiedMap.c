@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   identifiedMap.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
+/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/18 19:08:29 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/19 22:37:20 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,22 @@
 #include "map.h"
 
 #include "ft_printf.h"
+
+void	freeIdentifiedMap(t_identifiedMap *map, int status)
+{
+	if (status & NO_TEXTURE)
+		free(map->texturesFilename[NORTH_INDEX]);
+	if (status & SO_TEXTURE)
+		free(map->texturesFilename[SOUTH_INDEX]);
+	if (status & WE_TEXTURE)
+		free(map->texturesFilename[WEST_INDEX]);
+	if (status & EA_TEXTURE)
+		free(map->texturesFilename[EAST_INDEX]);
+	if (status & F_CODE)
+		free(map->code[F_INDEX]);
+	if (status & C_CODE)
+		free(map->code[C_INDEX]);
+}
 
 static int	initDataBlock(char *dataBlock[], int fd)
 {
@@ -42,6 +58,7 @@ static int	initDataBlock(char *dataBlock[], int fd)
 	return EXIT_SUCCESS;
 }
 
+
 static int	identifyMap(t_identifiedMap *map, char **lines)
 {
 	int	status = 0;
@@ -51,23 +68,25 @@ static int	identifyMap(t_identifiedMap *map, char **lines)
 		int	newStatus = 0;
 		while (lines[i][j] == ' ')
 			i++;
-		if ((lines[i][j] == 'F' || lines[i][j] == 'C') 
-			&& lines[i][j + 1] == ' ')
-			newStatus = identifyCode(map, &lines[i][j + 1]);
-		else if (ft_strnstr(&lines[i][j], "NO ", 3)
-			|| ft_strnstr(&lines[i][j], "SO ", 3)
-			|| ft_strnstr(&lines[i][j], "WE ", 3)
-			|| ft_strnstr(&lines[i][j], "EA ", 3))
+		if (seemToBeCode(&lines[i][j]))
+			newStatus = identifyCode(map, &lines[i][j + 1], lines[i][j]);
+		else if (seemToBeTexture(&lines[i][j]))
 			newStatus = identifyTexture(map, &lines[i][j]);
-		else if (ft_strchr("10", lines[i][j]))
-			newStatus = identifyArea(map, &lines[i]);
-		if (newStatus == 0)
+		else if (seemToBeArea(lines[i][j]))
+		{
+			map->mapStartIndex = i;
 			break;
+		}
+		if (newStatus == 0)
+		{
+			printf("%s\nLine %d incorrect\n", ERROR_MSG, i);
+			break;
+		}
 		status |= newStatus;
 		i++;
 	}
 	return status;
-}	
+}
 
 int	initIdentifiedMap(t_identifiedMap *map, char *mapFileName)
 {
@@ -81,10 +100,12 @@ int	initIdentifiedMap(t_identifiedMap *map, char *mapFileName)
 	char *dataBlock;
 	if (initDataBlock(&dataBlock, fd) == EXIT_FAILURE)
 		return EXIT_FAILURE;
-
 	char	**lines = ft_split(dataBlock, '\n');
 	int		status = identifyMap(map, lines);
 	free(dataBlock);
 	free_stab(lines);
-	return EXIT_SUCCESS;
+	if (status & COMPLETE && map->mapStartIndex != NOT_FOUND)
+		return EXIT_SUCCESS;
+	freeIdentifiedMap(map, status);
+	return EXIT_FAILURE;
 }
