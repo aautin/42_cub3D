@@ -27,7 +27,6 @@ SRC_FILES	:=	\
 				main.c				\
 				hook.c				\
 				formattedMap.c		\
-				identifiedParts.c	\
 				identifiedMap.c		\
 				player.c			\
 				window.c			\

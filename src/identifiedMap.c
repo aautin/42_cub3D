@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/20 00:17:43 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/21 23:53:14 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,14 @@
 
 void	freeIdentifiedMap(t_identifiedMap *map, int status)
 {
-	if (status & NO_TEXTURE)
-		free(map->texturesFilename[NORTH_INDEX]);
-	if (status & SO_TEXTURE)
-		free(map->texturesFilename[SOUTH_INDEX]);
-	if (status & WE_TEXTURE)
-		free(map->texturesFilename[WEST_INDEX]);
-	if (status & EA_TEXTURE)
-		free(map->texturesFilename[EAST_INDEX]);
-	if (status & F_CODE)
-		free(map->code[F_INDEX]);
-	if (status & C_CODE)
-		free(map->code[C_INDEX]);
+	int	i = 0;
+
+	while (i <= F_INDEX)
+	{
+		if (status & INDEX_TO_STATUS(i))
+			free(map->surfaces[i]);
+		i++;
+	}
 }
 
 static int	initDataBlock(char *dataBlock[], int fd)
@@ -58,35 +54,84 @@ static int	initDataBlock(char *dataBlock[], int fd)
 	return EXIT_SUCCESS;
 }
 
+static int	getSurfaceIndex(char *identifier)
+{
+	const int	identifierLen = ft_strlen(identifier);
+
+	if (identifierLen > 2)
+		return NOT_FOUND;
+	if (identifierLen == 1)
+	{
+		if (*identifier == 'C')
+			return C_INDEX;
+		return F_INDEX;
+	}
+	if (*identifier == 'N')
+		return NORTH_INDEX;
+	if (*identifier == 'S')
+		return SOUTH_INDEX;
+	if (*identifier == 'W')
+		return WEST_INDEX;
+	return EAST_INDEX;
+}
+
+static int	identifyLine(t_identifiedMap *map, char **components, int lineIndex, int currStatus)
+{
+	int		surfaceIndex;
+	char	*surfaceComplement;
+
+	if (!components[0] || !components[1] || components[2])
+		surfaceIndex = NOT_FOUND;
+	else
+		surfaceIndex = getSurfaceIndex(components[0]);
+	if (surfaceIndex == NOT_FOUND)
+	{
+		printf("%sLine %d incorrect\n", ERROR_MSG, lineIndex);
+		return NOT_FOUND;
+	}
+	surfaceComplement = ft_strdup(components[1]);
+	if (surfaceComplement == NULL)
+	{
+		perror("identifyLine():ft_strdup()");
+		return NOT_FOUND;
+	}
+	if (currStatus & INDEX_TO_STATUS(surfaceIndex))
+		free(map->surfaces[surfaceIndex]);
+	map->surfaces[surfaceIndex] = surfaceComplement;
+	return INDEX_TO_STATUS(surfaceIndex);
+}
+
+static int	isAreaBeginning(char *line)
+{
+	while (*line == ' ')
+		line++;
+	return ft_strchr("10", line[0]) != NULL;
+}
 
 static int	identifyMap(t_identifiedMap *map, char **lines)
 {
+	int	newStatus;
 	int	status = 0;
 	int	i = 0;
+
 	while (lines[i] != NULL) {
-		int	j = 0;
-		int	newStatus = 0;
-		while (lines[i][j] == ' ')
-			j++;
-		if (seemToBeCode(&lines[i][j]))
-			newStatus = identifyCode(map, &lines[i][j + 1], lines[i][j]);
-		else if (seemToBeTexture(&lines[i][j]))
-			newStatus = identifyTexture(map, &lines[i][j + 2], lines[i][j], lines[i][j + 1]);
-		else if (seemToBeArea(lines[i][j]))
+		if (isAreaBeginning(lines[i]))
 		{
-			map->mapStartIndex = i;
+			map->areaStartIndex = i;
 			break;
 		}
-		if (newStatus == 0)
-		{
-			printf("%s\nLine %d incorrect\n", ERROR_MSG, i);
-			break;
-		}
+		char **lineComponents = ft_split(lines[i], ' ');
+		if (lineComponents == NULL)
+			return (perror("identifyMap():ft_split()"), status);
+		newStatus = identifyLine(map, lineComponents, i, status);
+		free_stab(lineComponents);
+		if (newStatus == NOT_FOUND)
+			return status;
 		status |= newStatus;
 		i++;
 	}
-	if (lines[i] == NULL && status != COMPLETE && map->mapStartIndex != NOT_FOUND)
-		printf("The given file is incomplete\n");
+	if (status != COMPLETE_STATUS || map->areaStartIndex == NOT_FOUND)
+		printf("%sThe given file is incomplete\n", ERROR_MSG);
 	return status;
 }
 
@@ -103,10 +148,12 @@ int	initIdentifiedMap(t_identifiedMap *map, char *mapFileName)
 	if (initDataBlock(&dataBlock, fd) == EXIT_FAILURE)
 		return EXIT_FAILURE;
 	char	**lines = ft_split(dataBlock, '\n');
-	int		status = identifyMap(map, lines);
 	free(dataBlock);
+
+	int		status = identifyMap(map, lines);
 	free_stab(lines);
-	if (status & COMPLETE && map->mapStartIndex != NOT_FOUND)
+
+	if (status == COMPLETE_STATUS && map->areaStartIndex != NOT_FOUND)
 		return EXIT_SUCCESS;
 	freeIdentifiedMap(map, status);
 	return EXIT_FAILURE;

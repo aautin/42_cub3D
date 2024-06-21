@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/19 23:39:47 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/21 23:22:25 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 
 # include "libft.h"
 
-# define NOT_FOUND -1 
+# define INDEX_TO_STATUS(index) (1 << (index))
+# define NOT_FOUND -1
+# define COMPLETE_STATUS 0b00111111
 # define ERROR_MSG "Error\n"
 
 typedef enum e_identify_index {
@@ -23,20 +25,9 @@ typedef enum e_identify_index {
 	SOUTH_INDEX,
 	WEST_INDEX,
 	EAST_INDEX,
-	C_INDEX = 0,
-	F_INDEX = 1
+	C_INDEX,
+	F_INDEX
 }	t_identify_index;
-
-typedef enum e_identify_status {
-	C_CODE = (1 << 0),
-	F_CODE = (1 << 1),
-	NO_TEXTURE = (1 << 2),
-	SO_TEXTURE = (1 << 3),
-	WE_TEXTURE = (1 << 4),
-	EA_TEXTURE = (1 << 5),
-	COMPLETE = (C_CODE | F_CODE
-			| NO_TEXTURE | SO_TEXTURE | WE_TEXTURE | EA_TEXTURE)
-}	t_identify_status;
 
 typedef struct s_rgb {
 	unsigned char	rCode;
@@ -45,9 +36,8 @@ typedef struct s_rgb {
 }	t_rgb;
 
 typedef struct s_identifiedMap {
-	char	*texturesFilename[4];
-	char	*code[2];
-	int		mapStartIndex;
+	char	*surfaces[6];
+	int		areaStartIndex;
 }	t_identifiedMap;
 
 typedef struct s_map {
@@ -60,15 +50,10 @@ typedef struct s_map {
 	int			ySize;
 }	t_formattedMap;
 
-int		seemToBeCode(char *line);
-int		seemToBeTexture(char *line);
-int		seemToBeArea(char letter);
-int		identifyCode(t_identifiedMap *map, char *line, int letter);
-int		identifyTexture(t_identifiedMap *map, char *line, int letter, int nextLetter);
-
 void	freeIdentifiedMap(t_identifiedMap *map, int status);
 int		initIdentifiedMap(t_identifiedMap *identifiedMap, char *mapFileName);
 
+void	printIdentifiedMap(t_identifiedMap *identifiedMap);
 int		initMap(t_formattedMap *map, char *mapFileName);
 
 #endif
