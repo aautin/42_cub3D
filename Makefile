@@ -27,6 +27,7 @@ SRC_FILES	:=	\
 				main.c				\
 				hook.c				\
 				formattedMap.c		\
+				identifiedLine.c	\
 				identifiedMap.c		\
 				player.c			\
 				window.c			\
@@ -68,7 +69,7 @@ $(MLX_PATH)		:	$(MLX_TGZ)
 
 all				:	$(NAME)
 
-clean			:	cleanobj cleanlibs
+clean			:	cleanobj
 
 cleanobj		:
 					@$(RM) $(OBJ_PATH)
@@ -86,9 +87,13 @@ cleanlibs		:
 fclean			:	clean
 					@$(RM) $(NAME)
 					@echo "$(RED)Removed $(BLUE)$(NAME)$(DEFAULT)"
+					@if [ -f "$(LIBFT)" ]; then \
+						$(RM) $(LIBFT); \
+						echo "$(RED)Removed $(BLUE)$(LIBFT)$(DEFAULT)"; \
+					fi
 					@if [ -d "mlx" ]; then \
 						$(RM) mlx; \
-						echo "$(RED)Removed $(BLUE)$(MLX_PATH)$(RED) library$(DEFAULT)"; \
+						echo "$(RED)Removed $(BLUE)$(MLX_PATH) library$(DEFAULT)"; \
 					fi
 
 re				:	fclean all

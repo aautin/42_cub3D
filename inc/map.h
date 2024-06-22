@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/21 23:22:25 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/22 19:34:37 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,11 @@ typedef struct s_map {
 	int			ySize;
 }	t_formattedMap;
 
+// identifyLine.c
+int		isAreaBeginning(char *line);
+int		identifyLine(t_identifiedMap *map, char *line, int lineIndex, int status);
+
+// identifyMap.c
 void	freeIdentifiedMap(t_identifiedMap *map, int status);
 int		initIdentifiedMap(t_identifiedMap *identifiedMap, char *mapFileName);
 

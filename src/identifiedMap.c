@@ -6,15 +6,13 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/22 17:45:58 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/22 20:16:25 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "get_next_line.h"
 #include "map.h"
-
-#include "ft_printf.h"
 
 void	freeIdentifiedMap(t_identifiedMap *map, int status)
 {
@@ -28,84 +26,51 @@ void	freeIdentifiedMap(t_identifiedMap *map, int status)
 	}
 }
 
-static int	getSurfaceIndex(char *identifier)
+static void	eraseNewlines(char **lines)
 {
-	const int	identifierLen = ft_strlen(identifier);
+	int	i;
+	int	j;
 
-	if (identifierLen > 2)
-		return NOT_FOUND;
-	if (identifierLen == 1)
+	i = 0;
+	while (lines[i] != NULL)
 	{
-		if (*identifier == 'C')
-			return C_INDEX;
-		return F_INDEX;
+		j = 0;
+		while (lines[i][j] != '\0')
+		{
+			if (lines[i][j] == '\n')
+			{
+				lines[i][j] = '\0';
+				break ;
+			}
+			j++;
+		}
+		i++;
 	}
-	if (*identifier == 'N')
-		return NORTH_INDEX;
-	if (*identifier == 'S')
-		return SOUTH_INDEX;
-	if (*identifier == 'W')
-		return WEST_INDEX;
-	return EAST_INDEX;
-}
-
-static int	identifyLine(t_identifiedMap *map, char **components, int lineIndex, int currStatus)
-{
-	int		surfaceIndex;
-	char	*surfaceComplement;
-
-	if (!components[0] || !components[1] || components[2])
-		surfaceIndex = NOT_FOUND;
-	else
-		surfaceIndex = getSurfaceIndex(components[0]);
-	if (surfaceIndex == NOT_FOUND)
-	{
-		printf("%sLine %d incorrect\n", ERROR_MSG, lineIndex);
-		return NOT_FOUND;
-	}
-	surfaceComplement = ft_strdup(components[1]);
-	if (surfaceComplement == NULL)
-	{
-		perror("identifyLine():ft_strdup()");
-		return NOT_FOUND;
-	}
-	if (currStatus & INDEX_TO_STATUS(surfaceIndex))
-		free(map->surfaces[surfaceIndex]);
-	map->surfaces[surfaceIndex] = surfaceComplement;
-	return INDEX_TO_STATUS(surfaceIndex);
-}
-
-static int	isAreaBeginning(char *line)
-{
-	while (*line == ' ')
-		line++;
-	return ft_strchr("10", line[0]) != NULL;
 }
 
 static int	identifyMap(t_identifiedMap *map, char **lines)
 {
 	int	newStatus;
-	int	status = 0;
-	int	i = 0;
+	int	status;
+	int	i;
 
-	while (lines[i] != NULL) {
+	status = 0;
+	i = 0;
+	while (lines[i] != NULL)
+	{
 		if (isAreaBeginning(lines[i]))
 		{
 			map->areaStartIndex = i;
 			break;
 		}
-		char **lineComponents = ft_split(lines[i], ' ');
-		if (lineComponents == NULL)
-			return (perror("identifyMap():ft_split()"), status);
-		newStatus = identifyLine(map, lineComponents, i, status);
-		free_double_tab((void **) lineComponents, -1);
+		newStatus = identifyLine(map, lines[i], i, status);
 		if (newStatus == NOT_FOUND)
 			return status;
 		status |= newStatus;
 		i++;
 	}
 	if (status != COMPLETE_STATUS || map->areaStartIndex == NOT_FOUND)
-		printf("%sThe given file is incomplete\n", ERROR_MSG);
+		printf("%sThe file given is incomplete or in disorder\n", ERROR_MSG);
 	return status;
 }
 
@@ -114,37 +79,23 @@ int	initIdentifiedMap(t_identifiedMap *map, char *mapFileName)
 	int fd = open(mapFileName, O_RDONLY);
 	if (fd == -1)
 	{
-		perror("initMap():open()");
+		printf("%sCan't open or read the given file\n", ERROR_MSG);
 		return EXIT_FAILURE;
 	}
 
 	t_list	*dataElements = NULL;
-	char	*buffer;
-
-	buffer = get_next_line(fd);
-	while (buffer != NULL)
-	{
-		t_list *newElement = ft_lstnew(buffer);
-		if (newElement == NULL)
-		{
-			perror("initMapData():ft_lstnew()");
-			free(buffer);
-			ft_lstclear(&dataElements, &free);
-			return EXIT_FAILURE;
-		}
-		ft_lstadd_back(&dataElements, newElement);
-		buffer = get_next_line(fd);
-	}
+	dataElements = file_to_lst(fd);
 
 	char	**mapContent = (char **) lst_to_double_tab(dataElements, NULL);
+	eraseNewlines(mapContent);
 
 	int		status = identifyMap(map, mapContent);
-
 	ft_lstclear(&dataElements, NULL);
 	free_double_tab((void **) mapContent, -1);
 
 	if (status == COMPLETE_STATUS && map->areaStartIndex != NOT_FOUND)
 		return EXIT_SUCCESS;
+
 	freeIdentifiedMap(map, status);
 	return EXIT_FAILURE;
 }
