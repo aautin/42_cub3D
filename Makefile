@@ -36,21 +36,26 @@ OBJ_FILES	:=	$(SRC_FILES:.c=.o)
 
 SRC			:=	$(addprefix $(SRC_PATH)/, $(SRC_FILES))
 OBJ			:=	$(addprefix $(OBJ_PATH)/, $(OBJ_FILES))
+DEP			:=	$(OBJ:.o=.d)
 
 # ---------------------------------------- #
-CC+FLAGS	:=	cc -Wall -Werror -Wextra -g3
-MLXFLAGS	:=	-lmlx -lXext -lX11
+CC			:=	cc
+CFLAGS		:=	-Wall -Werror -Wextra -g3 -MMD -MP
 RM			:=	rm -rf
+LDFLAGS		:=	-L$(LIBFT_PATH) -L$(MLX_PATH) 
+LDLIBS		:=	-l$(LIBFT_NAME)  -l$(MLX_NAME) -lXext -lX11
 # ---------------------------------------- #
 $(NAME)			:	$(MLX) $(LIBFT) $(OBJ_PATH) $(OBJ)
-					@$(CC+FLAGS) $(OBJ) -o $@ -L$(LIBFT_PATH) -l$(LIBFT_NAME) -L$(MLX_PATH) -l$(MLX_NAME) $(MLXFLAGS)
+					@$(CC) $(OBJ) -o $@ $(LDFLAGS) $(LDLIBS)
 					@echo "$(CYAN)Successfully linked the objects into $(ORANGE)$(NAME)$(DEFAULT)"
 
 $(OBJ_PATH)		:
 					@mkdir -p $(OBJ_PATH)
 
+-include $(DEP)
+
 $(OBJ_PATH)/%.o	:	$(SRC_PATH)/%.c
-					@$(CC+FLAGS) -c $< -o $@ -I$(LIBFT_INC) -I$(MLX_INC) -I$(INC_PATH)
+					@$(CC) $(CFLAGS) -c $< -o $@ -I$(LIBFT_INC) -I$(MLX_INC) -I$(INC_PATH)
 					@echo "$(GREEN)Compiled $(PURPLE)$<$(DEFAULT)"
 
 $(MLX)			:	$(MLX_PATH)
