@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/21 22:00:53 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/22 20:47:21 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	printIdentifiedMap(t_identifiedMap *identifiedMap)
 	printf("index of the first line of the map:%d\n", identifiedMap->areaStartIndex);
 }
 
-int	initMap(t_formattedMap *map, char *mapFileName)
+int	initFormattedMap(t_formattedMap *map, char *mapFileName)
 {
 	t_identifiedMap identifiedMap;
 

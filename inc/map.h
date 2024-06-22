@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/22 19:34:37 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/22 20:49:06 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct s_identifiedMap {
 }	t_identifiedMap;
 
 typedef struct s_map {
-	char		*texturesXpm[4];
+	void		*texturesObj[4];
 	char		**area;
 	t_rgb		floarCode;
 	t_rgb		ceilingCode;
@@ -59,6 +59,6 @@ void	freeIdentifiedMap(t_identifiedMap *map, int status);
 int		initIdentifiedMap(t_identifiedMap *identifiedMap, char *mapFileName);
 
 void	printIdentifiedMap(t_identifiedMap *identifiedMap);
-int		initMap(t_formattedMap *map, char *mapFileName);
+int		initFormattedMap(t_formattedMap *map, char *mapFileName);
 
 #endif
