@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/22 20:41:30 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/22 21:41:31 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	main(int argc, char **argv)
 	}
 
 	t_formattedMap map;
-	if (initFormattedMap(&map, argv[1]) == EXIT_FAILURE)
+	if (initFormattedMap(mlx, &map, argv[1]) == EXIT_FAILURE)
 	{
 		mlx_destroy_display(mlx);
 		free(mlx);

@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/22 20:49:06 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/22 22:15:11 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 # define INDEX_TO_STATUS(index) (1 << (index))
 # define NOT_FOUND -1
-# define COMPLETE_STATUS 0b00111111
+# define COMPLETE_STATUS 0b111111
 # define ERROR_MSG "Error\n"
 
 typedef enum e_identify_index {
@@ -42,6 +42,8 @@ typedef struct s_identifiedMap {
 
 typedef struct s_map {
 	void		*texturesObj[4];
+	int			texturesObjWidth[4];
+	int			texturesObjHeight[4];
 	char		**area;
 	t_rgb		floarCode;
 	t_rgb		ceilingCode;
@@ -59,6 +61,6 @@ void	freeIdentifiedMap(t_identifiedMap *map, int status);
 int		initIdentifiedMap(t_identifiedMap *identifiedMap, char *mapFileName);
 
 void	printIdentifiedMap(t_identifiedMap *identifiedMap);
-int		initFormattedMap(t_formattedMap *map, char *mapFileName);
+int		initFormattedMap(void *mlx, t_formattedMap *map, char *mapFileName);
 
 #endif
