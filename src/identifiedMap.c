@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/21 23:53:14 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/22 17:45:58 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,32 +26,6 @@ void	freeIdentifiedMap(t_identifiedMap *map, int status)
 			free(map->surfaces[i]);
 		i++;
 	}
-}
-
-static int	initDataBlock(char *dataBlock[], int fd)
-{
-	t_list *dataElements = NULL;
-
-	*dataBlock = get_next_line(fd);
-	while (*dataBlock != NULL)
-	{
-		t_list *newElement = ft_lstnew(*dataBlock);
-		if (newElement == NULL)
-		{
-			perror("initMapData():ft_lstnew()");
-			free(*dataBlock);
-			ft_lstclear(&dataElements, &free);
-			return EXIT_FAILURE;
-		}
-		ft_lstadd_back(&dataElements, newElement);
-		*dataBlock = get_next_line(fd);
-	}
-
-	*dataBlock = lsttostr(dataElements);
-	ft_lstclear(&dataElements, &free);
-	if (*dataBlock == NULL)
-		return EXIT_FAILURE;
-	return EXIT_SUCCESS;
 }
 
 static int	getSurfaceIndex(char *identifier)
@@ -124,7 +98,7 @@ static int	identifyMap(t_identifiedMap *map, char **lines)
 		if (lineComponents == NULL)
 			return (perror("identifyMap():ft_split()"), status);
 		newStatus = identifyLine(map, lineComponents, i, status);
-		free_stab(lineComponents);
+		free_double_tab((void **) lineComponents, -1);
 		if (newStatus == NOT_FOUND)
 			return status;
 		status |= newStatus;
@@ -144,14 +118,30 @@ int	initIdentifiedMap(t_identifiedMap *map, char *mapFileName)
 		return EXIT_FAILURE;
 	}
 
-	char *dataBlock;
-	if (initDataBlock(&dataBlock, fd) == EXIT_FAILURE)
-		return EXIT_FAILURE;
-	char	**lines = ft_split(dataBlock, '\n');
-	free(dataBlock);
+	t_list	*dataElements = NULL;
+	char	*buffer;
 
-	int		status = identifyMap(map, lines);
-	free_stab(lines);
+	buffer = get_next_line(fd);
+	while (buffer != NULL)
+	{
+		t_list *newElement = ft_lstnew(buffer);
+		if (newElement == NULL)
+		{
+			perror("initMapData():ft_lstnew()");
+			free(buffer);
+			ft_lstclear(&dataElements, &free);
+			return EXIT_FAILURE;
+		}
+		ft_lstadd_back(&dataElements, newElement);
+		buffer = get_next_line(fd);
+	}
+
+	char	**mapContent = (char **) lst_to_double_tab(dataElements, NULL);
+
+	int		status = identifyMap(map, mapContent);
+
+	ft_lstclear(&dataElements, NULL);
+	free_double_tab((void **) mapContent, -1);
 
 	if (status == COMPLETE_STATUS && map->areaStartIndex != NOT_FOUND)
 		return EXIT_SUCCESS;

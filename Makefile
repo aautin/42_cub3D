@@ -13,7 +13,7 @@ SRC_PATH	:=	src
 OBJ_PATH	:=	obj
 
 LIBFT_PATH	:=	libft
-LIBFT_INC	:=	$(LIBFT_PATH)/includes
+LIBFT_INC	:=	$(LIBFT_PATH)/inc
 LIBFT		:=	$(LIBFT_PATH)/libft.a
 LIBFT_NAME	:=	ft
 
