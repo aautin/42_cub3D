@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/23 15:18:43 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/23 15:31:28 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,10 @@ int		identifyLine(t_identifiedMap *map, char *line, int lineIndex, int status);
 // identifyMap
 void	freeIdentifiedMap(t_identifiedMap *map, int status);
 int		initIdentifiedMap(t_identifiedMap *identifiedMap, char *mapFileName);
+
+// formattedParts
+int		initTextureObjs(void *mlx, t_formattedMap *formatMap, t_identifiedMap *identMap);
+int		initCodes(t_rgb *codes, char **surfaces);
 
 // formattedMap
 void	printIdentifiedMap(t_identifiedMap *identifiedMap);
