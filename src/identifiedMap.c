@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/22 20:16:25 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/23 14:31:19 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 
 void	freeIdentifiedMap(t_identifiedMap *map, int status)
 {
-	int	i = 0;
+	int	i = C_INDEX;
 
-	while (i <= F_INDEX)
+	while (i <= EAST_INDEX)
 	{
 		if (status & INDEX_TO_STATUS(i))
 			free(map->surfaces[i]);

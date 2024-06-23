@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/22 22:15:11 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/23 15:18:43 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,18 @@
 # define ERROR_MSG "Error\n"
 
 typedef enum e_identify_index {
+	C_INDEX,
+	F_INDEX,
 	NORTH_INDEX,
 	SOUTH_INDEX,
 	WEST_INDEX,
-	EAST_INDEX,
-	C_INDEX,
-	F_INDEX
+	EAST_INDEX
 }	t_identify_index;
 
 typedef struct s_rgb {
-	unsigned char	rCode;
-	unsigned char	gCode;
-	unsigned char	bCode;
+	int	rCode;
+	int	gCode;
+	int	bCode;
 }	t_rgb;
 
 typedef struct s_identifiedMap {
@@ -41,25 +41,24 @@ typedef struct s_identifiedMap {
 }	t_identifiedMap;
 
 typedef struct s_map {
-	void		*texturesObj[4];
-	int			texturesObjWidth[4];
-	int			texturesObjHeight[4];
+	void		*textureObjs[4];
+	int			textureObjsWidth[4];
+	int			textureObjsHeight[4];
+	t_rgb		codes[2];
 	char		**area;
-	t_rgb		floarCode;
-	t_rgb		ceilingCode;
-	char		**xmp;
-	int			xSize;
+	int			*xSize;
 	int			ySize;
 }	t_formattedMap;
 
-// identifyLine.c
+// identifyLine
 int		isAreaBeginning(char *line);
 int		identifyLine(t_identifiedMap *map, char *line, int lineIndex, int status);
 
-// identifyMap.c
+// identifyMap
 void	freeIdentifiedMap(t_identifiedMap *map, int status);
 int		initIdentifiedMap(t_identifiedMap *identifiedMap, char *mapFileName);
 
+// formattedMap
 void	printIdentifiedMap(t_identifiedMap *identifiedMap);
 int		initFormattedMap(void *mlx, t_formattedMap *map, char *mapFileName);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
+/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:41:18 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/18 11:30:48 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/23 14:51:18 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	initPlayerPosition(t_player *player, t_formattedMap *map)
 	while (rowI < map->ySize)
 	{
 		int	columnI = 0;
-		while (columnI < map->xSize)
+		while (columnI < map->xSize[rowI])
 		{
 			if (ft_strchr("01", map->area[rowI][columnI]) == NULL)	
 			{
