@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/23 15:31:28 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/23 19:39:41 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,29 +37,31 @@ typedef struct s_rgb {
 
 typedef struct s_identifiedMap {
 	char	*surfaces[6];
-	int		areaStartIndex;
+	int		areaIndex;
 }	t_identifiedMap;
 
-typedef struct s_map {
-	void		*textureObjs[4];
-	int			textureObjsWidth[4];
-	int			textureObjsHeight[4];
-	t_rgb		codes[2];
-	char		**area;
-	int			*xSize;
-	int			ySize;
+typedef struct s_formattedMap {
+	void	*textureObjs[4];
+	int		textureObjsWidth[4];
+	int		textureObjsHeight[4];
+	t_rgb	codes[2];
+	char	**area;
+	char	player;
 }	t_formattedMap;
 
 // identifyLine
 int		isAreaBeginning(char *line);
-int		identifyLine(t_identifiedMap *map, char *line, int lineIndex, int status);
+int		identifyLine(t_identifiedMap *map, char *line, int lineIndex,
+			int status);
 
 // identifyMap
 void	freeIdentifiedMap(t_identifiedMap *map, int status);
-int		initIdentifiedMap(t_identifiedMap *identifiedMap, char *mapFileName);
+int		initIdentification(t_identifiedMap *identifiedMap, char *mapFileName,
+			char ***areaPtr);
 
 // formattedParts
-int		initTextureObjs(void *mlx, t_formattedMap *formatMap, t_identifiedMap *identMap);
+int		initTextureObjs(void *mlx, t_formattedMap *formatMap,
+			t_identifiedMap *identMap);
 int		initCodes(t_rgb *codes, char **surfaces);
 
 // formattedMap

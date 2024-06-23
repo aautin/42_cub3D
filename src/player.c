@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:41:18 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/23 14:51:18 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/23 18:40:02 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 static void	initPlayerPosition(t_player *player, t_formattedMap *map)
 {
 	int	rowI = 0;
-	while (rowI < map->ySize)
+	while (map->area[rowI] != NULL)
 	{
 		int	columnI = 0;
 		while (columnI < map->xSize[rowI])
