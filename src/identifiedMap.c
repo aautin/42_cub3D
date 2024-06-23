@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/23 14:31:19 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/23 18:51:34 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int	identifyMap(t_identifiedMap *map, char **lines)
 	{
 		if (isAreaBeginning(lines[i]))
 		{
-			map->areaStartIndex = i;
+			map->areaIndex = i;
 			break;
 		}
 		newStatus = identifyLine(map, lines[i], i, status);
@@ -69,12 +69,39 @@ static int	identifyMap(t_identifiedMap *map, char **lines)
 		status |= newStatus;
 		i++;
 	}
-	if (status != COMPLETE_STATUS || map->areaStartIndex == NOT_FOUND)
+	if (status != COMPLETE_STATUS || map->areaIndex == NOT_FOUND)
 		printf("%sThe file given is incomplete or in disorder\n", ERROR_MSG);
 	return status;
 }
 
-int	initIdentifiedMap(t_identifiedMap *map, char *mapFileName)
+static int	identifyArea(char **mapContent, int areaIndex, char ***areaPtr)
+{
+	char	**newPtr;
+	int		areaSize = 0;
+
+	while (mapContent[areaIndex + areaSize] != NULL)
+		areaSize++;
+	newPtr = malloc((areaSize + 1) * sizeof(char *));
+	if (newPtr == NULL)
+	{
+		perror("identifyArea():malloc()");
+		return EXIT_FAILURE;
+	}
+	areaSize = 0;
+	while (mapContent[areaIndex + areaSize] != NULL)
+	{
+		newPtr[areaSize] = mapContent[areaIndex + areaSize];
+		areaSize++;
+	}
+	newPtr[areaSize] = NULL;
+	while (areaIndex-- > 0)
+		free(mapContent[areaIndex]);
+	free(mapContent);
+	*areaPtr = newPtr;
+	return EXIT_SUCCESS;
+}
+
+int	initIdentification(t_identifiedMap *map, char *mapFileName, char ***area)
 {
 	int fd = open(mapFileName, O_RDONLY);
 	if (fd == -1)
@@ -91,11 +118,12 @@ int	initIdentifiedMap(t_identifiedMap *map, char *mapFileName)
 
 	int		status = identifyMap(map, mapContent);
 	ft_lstclear(&dataElements, NULL);
-	free_double_tab((void **) mapContent, -1);
 
-	if (status == COMPLETE_STATUS && map->areaStartIndex != NOT_FOUND)
+	if (status == COMPLETE_STATUS && map->areaIndex != NOT_FOUND
+		&& identifyArea(mapContent, map->areaIndex, area) == EXIT_SUCCESS)
 		return EXIT_SUCCESS;
 
+	free_double_tab((void **) mapContent, -1);
 	freeIdentifiedMap(map, status);
 	return EXIT_FAILURE;
 }

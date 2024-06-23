@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/23 15:31:54 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/23 19:37:44 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ void	printIdentifiedMap(t_identifiedMap *identifiedMap)
 	printf("SO path-texture: %s\n", identifiedMap->surfaces[SOUTH_INDEX]);
 	printf("WE path-texture: %s\n", identifiedMap->surfaces[WEST_INDEX]);
 	printf("EA path-texture: %s\n", identifiedMap->surfaces[EAST_INDEX]);
-	printf("index of the first line of the map:%d\n", identifiedMap->areaStartIndex);
+	printf("index of the first line of the map:%d\n", identifiedMap->areaIndex);
 }
 
 void	freeTextureObjs(void *mlx, void **textureObjs)
 {
-	int	i = 0;
+	int	i = NORTH_INDEX;
 
 	while (i <= EAST_INDEX)
 	{
@@ -42,21 +42,29 @@ int	initFormattedMap(void *mlx, t_formattedMap *map, char *mapFileName)
 {
 	t_identifiedMap identifiedMap;
 
-	identifiedMap.areaStartIndex = NOT_FOUND;
-	if (initIdentifiedMap(&identifiedMap, mapFileName) == EXIT_FAILURE)
+	identifiedMap.areaIndex = NOT_FOUND;
+	if (initIdentification(&identifiedMap, mapFileName, &map->area) == EXIT_FAILURE)
 		return EXIT_FAILURE;
-	printIdentifiedMap(&identifiedMap);
 	if (initCodes(map->codes, identifiedMap.surfaces) == EXIT_FAILURE)
 	{
+		free_double_tab((void **) map->area, -1);
 		freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS);
 		return EXIT_FAILURE;
 	}
 	if (initTextureObjs(mlx, map, &identifiedMap) == EXIT_FAILURE)
 	{
+		free_double_tab((void **) map->area, -1);
 		freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS);
 		return EXIT_FAILURE;
 	}
-	// .. here have to parse map area
+	printIdentifiedMap(&identifiedMap);
+	if (checkArea(map) == EXIT_FAILURE)
+	{
+		free_double_tab((void **) map->area, -1);
+		freeTextureObjs(mlx, map->textureObjs);
+		freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS);
+		return EXIT_FAILURE;
+	}
 	freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS);
 	return EXIT_SUCCESS;
 }

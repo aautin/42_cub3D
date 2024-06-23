@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/23 15:30:46 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/23 19:37:50 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	initTextureObjs(void *mlx, t_formattedMap *formatMap, t_identifiedMap *ident
 
 	if (!arePathsAccessible(identMap->surfaces))
 		return EXIT_FAILURE;
-	i = 0;
+	i = NORTH_INDEX;
 	while (i <= EAST_INDEX)
 	{
 		newImage = mlx_xpm_file_to_image(mlx, identMap->surfaces[i],
@@ -96,6 +96,21 @@ int	initCodes(t_rgb *codes, char **surfaces)
 		if (initCode(codes, surfaces, i) == EXIT_FAILURE)
 			return EXIT_FAILURE;
 		i++;
+	}
+	return EXIT_SUCCESS;
+}
+
+int	checkArea(t_formattedMap *map)
+{
+	int expansion = TRUE;
+
+	map->player = 0;
+
+	while (expansion != 0)
+	{
+		expansion = floodfile(map);
+		if (expansion == EXIT_FAILURE)
+			return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
 }
