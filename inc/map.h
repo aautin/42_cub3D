@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/24 17:16:58 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/24 21:00:50 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_formattedMap {
 	int		textureObjsHeight[4];
 	t_rgb	codes[2];
 	char	**area;
+	int		*xSize;
 	char	player;
 }	t_formattedMap;
 
@@ -60,10 +61,10 @@ int		initIdentification(t_identifiedMap *identifiedMap, char *mapFileName,
 			char ***areaPtr);
 
 // formattedArea
-int		floodfile(t_formattedMap *map);
-int		checkArea(t_formattedMap *map);
+int		initArea(t_formattedMap *map);
 
 // formattedParts
+int		*initAreaxSize(char **area);
 int		initTextureObjs(void *mlx, t_formattedMap *formatMap,
 			t_identifiedMap *identMap);
 int		initCodes(t_rgb *codes, char **surfaces);

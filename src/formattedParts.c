@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/24 17:16:14 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/24 21:00:32 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,31 @@
 #include "mlx.h"
 #include "map.h"
 
+int	*initAreaxSize(char **area)
+{
+	int	i = 0;
+	while (area[i] != NULL)
+		i++;
+
+	int	*xSize = malloc(i * sizeof(int));
+	if (xSize == NULL)
+	{
+		perror("initAreaxSize():malloc()");
+		return NULL;
+	}
+
+	i = 0;
+	while (area[i] != NULL)
+	{
+		xSize[i] = ft_strlen(area[i]);
+		i++;
+	}
+	return xSize;
+}
+
 static int	arePathsAccessible(char **paths)
 {
-	int	i = NORTH_INDEX;
+	t_identify_index	i = NORTH_INDEX;
 
 	while (i <= EAST_INDEX)
 	{
@@ -69,8 +91,8 @@ static int	initCode(t_rgb *codes, char **surfaces, int index)
 	if (!components[0] || !components[1]
 		|| !components[2] || components[3])
 	{
-		printf("%sThe %s rgb-code has an incorrect format\n",
-			ERROR_MSG, surfaces[index]);
+		printf(ERROR_MSG "The %s rgb-code has an incorrect format\n",
+				surfaces[index]);
 		return free_double_tab((void **) components, -1), EXIT_FAILURE;
 	}
 	codes[index].rCode = ft_atoi(components[0]);
@@ -80,8 +102,8 @@ static int	initCode(t_rgb *codes, char **surfaces, int index)
 		|| codes[index].gCode != (unsigned char) codes[index].gCode
 		|| codes[index].bCode != (unsigned char) codes[index].bCode)
 	{
-		printf("%sThe %s rgb-code has incorrect values\n",
-			ERROR_MSG, surfaces[index]);
+		printf(ERROR_MSG "The %s rgb-code has incorrect values\n",
+				surfaces[index]);
 		return free_double_tab((void **) components, -1), EXIT_FAILURE;
 	}
 	return free_double_tab((void **) components, -1), EXIT_SUCCESS;
@@ -89,7 +111,7 @@ static int	initCode(t_rgb *codes, char **surfaces, int index)
 
 int	initCodes(t_rgb *codes, char **surfaces)
 {
-	int	i = 0;
+	t_identify_index	i = C_INDEX;
 
 	while (i <= F_INDEX)
 	{

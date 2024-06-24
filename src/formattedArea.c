@@ -6,50 +6,120 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:24:21 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/24 17:20:23 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/25 21:30:38 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stdio.h>
 
 #include "libft.h"
 
 #include "map.h"
 
-int	floodfile(t_formattedMap *map)
+static int	initPlayer(char currentPosition, char *player)
 {
-	i = 0;
-	while (map->area[i] != NULL)
+	if (ft_strchr("NSWE", currentPosition) != NULL)
 	{
-		j = 0;
-		while (map->area[i][j] != '\0')
+		if (*player)
 		{
-			if (ft_strchr("NSWE0", map->area[i][j]) != NULL)
-			{
-				if (map->player)
-				{
-					printf("%sMap has several players\n", ERROR_MSG);
-					return EXIT_FAILURE;
-				}
-				map->player = map->area[i][j];
-			}
-			else if (map->area[i][j] == '')
-			j++;
+			printf(ERROR_MSG "Map has several players\n");
+			return EXIT_FAILURE;		
 		}
-		i++;
-	}
-	return 
-}
-
-int	checkArea(t_formattedMap *map)
-{
-	int expansion = TRUE;
-
-	map->player = 0;
-
-	while (expansion != 0)
-	{
-		expansion = floodfile(map);
-		if (expansion == EXIT_FAILURE)
-			return EXIT_FAILURE;
+		*player = currentPosition;
 	}
 	return EXIT_SUCCESS;
+}
+
+static int	floodchar(int *xSize, char **area, int lineI, int colI)
+{
+	int	status = EXIT_FAILURE;
+
+	if (lineI - 1 < 0 || xSize[lineI - 1] - 1 < colI 
+		|| area[lineI + 1] == NULL || xSize[lineI + 1] - 1 < colI
+		|| colI - 1 < 0 || area[lineI][colI + 1] == '\0')
+		return NOT_FOUND;
+	for (int step = -1; step <= 1; step += 2)
+	{
+		if (area[lineI + step][colI] && ft_strchr("0 ", area[lineI + step][colI]) != NULL)
+		{
+			status = EXIT_SUCCESS;
+			area[lineI + step][colI] = 'T';
+		}
+	}
+	for (int step = -1; step <= 1; step += 2)
+	{
+		if (area[lineI + step][colI] && ft_strchr("0 ", area[lineI][colI + step]) != NULL)
+		{
+			status = EXIT_SUCCESS;
+			area[lineI][colI + step] = 'T';
+		}
+	}
+	return status;
+}
+
+static int	floodline(t_formattedMap *map, char **area, int lineI, int *expansion)
+{
+	int	colI = 0;
+
+	while (area[lineI][colI] != '\0')
+	{
+		if (initPlayer(area[lineI][colI], &map->player) == EXIT_FAILURE)
+			return EXIT_FAILURE;
+		if (ft_strchr("NSWET", area[lineI][colI]) != NULL)
+		{
+			int	flood_status = floodchar(map->xSize, area, lineI, colI);
+			if (flood_status == NOT_FOUND)
+			{
+				printf(ERROR_MSG "Map isn't closed\n");
+				return EXIT_FAILURE;
+			}
+			if (flood_status == EXIT_SUCCESS)
+				*expansion = TRUE;
+		}
+		else if (ft_strchr("10 ", area[lineI][colI]) == NULL)
+		{
+			printf(ERROR_MSG "Map has wrong chars\n");
+			return EXIT_FAILURE;
+		}
+		colI++;
+	}
+	return EXIT_SUCCESS;
+}
+
+static int	floodfill(t_formattedMap *map)
+{
+	int expansion = TRUE;
+	while (expansion == TRUE)
+	{
+		map->player = 0;
+		expansion = FALSE;
+		int	i = 0;
+		while (map->area[i] != NULL)
+		{
+			if (floodline(map, map->area, i, &expansion) == EXIT_FAILURE)
+				return EXIT_FAILURE;
+			i++;
+		}
+	}
+	return EXIT_SUCCESS;
+}
+
+void	printfArea(char **area)
+{
+	for (int i = 0; area[i] != NULL; i++)
+	{
+		printf("%s\n", area[i]);
+	}
+}
+
+int	initArea(t_formattedMap *map)
+{
+	map->xSize = initAreaxSize(map->area);
+	if (map->xSize == NULL)
+		return EXIT_FAILURE;
+
+	int	status = floodfill(map);
+
+	printfArea(map->area);
+	return status;
 }

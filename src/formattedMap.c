@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/23 19:37:44 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/24 21:41:26 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	initFormattedMap(void *mlx, t_formattedMap *map, char *mapFileName)
 		return EXIT_FAILURE;
 	}
 	printIdentifiedMap(&identifiedMap);
-	if (checkArea(map) == EXIT_FAILURE)
+	if (initArea(map) == EXIT_FAILURE)
 	{
 		free_double_tab((void **) map->area, -1);
 		freeTextureObjs(mlx, map->textureObjs);

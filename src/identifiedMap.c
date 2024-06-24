@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/23 18:51:34 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/24 20:18:55 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 void	freeIdentifiedMap(t_identifiedMap *map, int status)
 {
-	int	i = C_INDEX;
+	t_identify_index	i = C_INDEX;
 
 	while (i <= EAST_INDEX)
 	{
@@ -70,7 +70,7 @@ static int	identifyMap(t_identifiedMap *map, char **lines)
 		i++;
 	}
 	if (status != COMPLETE_STATUS || map->areaIndex == NOT_FOUND)
-		printf("%sThe file given is incomplete or in disorder\n", ERROR_MSG);
+		printf(ERROR_MSG "The file given is incomplete or in disorder\n");
 	return status;
 }
 
@@ -103,10 +103,10 @@ static int	identifyArea(char **mapContent, int areaIndex, char ***areaPtr)
 
 int	initIdentification(t_identifiedMap *map, char *mapFileName, char ***area)
 {
-	int fd = open(mapFileName, O_RDONLY);
+	int const	fd = open(mapFileName, O_RDONLY);
 	if (fd == -1)
 	{
-		printf("%sCan't open or read the given file\n", ERROR_MSG);
+		printf(ERROR_MSG "Can't open or read the given file\n");
 		return EXIT_FAILURE;
 	}
 
