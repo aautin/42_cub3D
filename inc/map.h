@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/23 19:39:41 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/24 17:16:58 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ int		identifyLine(t_identifiedMap *map, char *line, int lineIndex,
 void	freeIdentifiedMap(t_identifiedMap *map, int status);
 int		initIdentification(t_identifiedMap *identifiedMap, char *mapFileName,
 			char ***areaPtr);
+
+// formattedArea
+int		floodfile(t_formattedMap *map);
+int		checkArea(t_formattedMap *map);
 
 // formattedParts
 int		initTextureObjs(void *mlx, t_formattedMap *formatMap,

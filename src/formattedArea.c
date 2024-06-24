@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   floodfill.c                                        :+:      :+:    :+:   */
+/*   formattedArea.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:24:21 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/23 19:37:51 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/24 17:20:23 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 
 int	floodfile(t_formattedMap *map)
 {
-	
 	i = 0;
 	while (map->area[i] != NULL)
 	{
@@ -38,4 +37,19 @@ int	floodfile(t_formattedMap *map)
 		i++;
 	}
 	return 
+}
+
+int	checkArea(t_formattedMap *map)
+{
+	int expansion = TRUE;
+
+	map->player = 0;
+
+	while (expansion != 0)
+	{
+		expansion = floodfile(map);
+		if (expansion == EXIT_FAILURE)
+			return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
 }

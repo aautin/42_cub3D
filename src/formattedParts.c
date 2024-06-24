@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/23 19:37:50 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/24 17:16:14 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,21 +96,6 @@ int	initCodes(t_rgb *codes, char **surfaces)
 		if (initCode(codes, surfaces, i) == EXIT_FAILURE)
 			return EXIT_FAILURE;
 		i++;
-	}
-	return EXIT_SUCCESS;
-}
-
-int	checkArea(t_formattedMap *map)
-{
-	int expansion = TRUE;
-
-	map->player = 0;
-
-	while (expansion != 0)
-	{
-		expansion = floodfile(map);
-		if (expansion == EXIT_FAILURE)
-			return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
 }
