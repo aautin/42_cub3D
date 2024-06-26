@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/22 21:41:31 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/26 20:55:40 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,32 @@ void	modifyPlayerPosition(int keycode, t_player *player)
 	}
 }
 
-int	main(int argc, char **argv)
+static int	checkArgv(int argc, char **argv)
 {
 	if (argc != 2)
-		return 1;
+	{
+		printf(ERROR_MSG "Wrong number of arguments\n");
+		return EXIT_FAILURE;
+	}
+	
+	char *fileExtension = ft_strrchr(argv[1], '.');
+	if (fileExtension == argv[1] || fileExtension == NULL)
+	{
+		printf(ERROR_MSG "File name is incorrect\n");
+		return EXIT_FAILURE;
+	}
+	if (ft_strncmp(fileExtension, ".cub", 5) != 0)
+	{
+		printf(ERROR_MSG "File name has a wrong extension\n");
+		return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
+}
+
+int	main(int argc, char **argv)
+{
+	if (checkArgv(argc, argv) == EXIT_FAILURE)
+		return EXIT_FAILURE;
 
 	void *mlx = mlx_init();
 	if (mlx == NULL)

@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:24:21 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/26 19:00:09 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/26 20:43:18 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,11 @@ static int	floodfill(t_formattedMap *map)
 			if (floodline(map, map->area, i, &expansion) == EXIT_FAILURE)
 				return EXIT_FAILURE;
 			i++;
+		}
+		if (!map->player)
+		{
+			printf(ERROR_MSG "Map has no player\n");
+			return EXIT_FAILURE;
 		}
 	}
 	return EXIT_SUCCESS;
