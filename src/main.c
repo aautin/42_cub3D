@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
+/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/17 01:47:42 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/26 20:55:40 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft_extended.h"
+#include "ft_printf.h"
 #include "mlx.h"
 #include "mlx_int.h"
 
@@ -25,7 +25,7 @@
 #define PLANE_LENGHT	2 * DIR_LENGHT
 // here "2 * DIR_LENGHT" sets a 90' FOV
 
-static void	initKeyHandlerParam(t_keyHandlerParam *param, t_window *window, t_map *map, t_player *player, void *mlx)
+static void	initKeyHandlerParam(t_keyHandlerParam *param, t_window *window, t_formattedMap *map, t_player *player, void *mlx)
 {
 	param->window = window;
 	param->player = player;
@@ -33,7 +33,7 @@ static void	initKeyHandlerParam(t_keyHandlerParam *param, t_window *window, t_ma
 	param->mlx = mlx;
 }
 
-int	isKeycodeMakingPlayerMove(int keycode, t_map *map, t_player *player)
+int	isKeycodeMakingPlayerMove(int keycode, t_formattedMap *map, t_player *player)
 {
 	(void) map;
 	(void) player;
@@ -74,27 +74,63 @@ void	modifyPlayerPosition(int keycode, t_player *player)
 	}
 }
 
-int	main(int argc, char **argv)
+static int	checkArgv(int argc, char **argv)
 {
 	if (argc != 2)
-		return 1;
+	{
+		printf(ERROR_MSG "Wrong number of arguments\n");
+		return EXIT_FAILURE;
+	}
+	
+	char *fileExtension = ft_strrchr(argv[1], '.');
+	if (fileExtension == argv[1] || fileExtension == NULL)
+	{
+		printf(ERROR_MSG "File name is incorrect\n");
+		return EXIT_FAILURE;
+	}
+	if (ft_strncmp(fileExtension, ".cub", 5) != 0)
+	{
+		printf(ERROR_MSG "File name has a wrong extension\n");
+		return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
+}
+
+int	main(int argc, char **argv)
+{
+	if (checkArgv(argc, argv) == EXIT_FAILURE)
+		return EXIT_FAILURE;
 
 	void *mlx = mlx_init();
 	if (mlx == NULL)
-		return 1;
+	{
+		perror("main():mlx_init()");
+		return EXIT_FAILURE;
+	}
 
 	int	xScreenSize, yScreenSize;
 	mlx_get_screen_size(mlx, &xScreenSize, &yScreenSize);
 	if (xScreenSize <= DIR_LENGHT * 2 || yScreenSize <= DIR_LENGHT * 2)
-		return 0;
+	{
+		ft_printf("Screen size isn't adapted for this program.\n");
+		return EXIT_FAILURE;
+	}
 
-	void *windowObj = mlx_new_window(mlx, xScreenSize, yScreenSize, "cub3D");
+	t_formattedMap map;
+	if (initFormattedMap(mlx, &map, argv[1]) == EXIT_FAILURE)
+	{
+		mlx_destroy_display(mlx);
+		free(mlx);
+		return EXIT_FAILURE;
+	}
 
 	t_window window;
-	initWindow(&window, windowObj, xScreenSize, yScreenSize);
-
-	t_map map;
-	initMap(&map, argv[1]);
+	if (initWindow(&window, mlx, xScreenSize, yScreenSize) == EXIT_FAILURE)
+	{
+		// free map
+		mlx_destroy_display(mlx);
+		return EXIT_FAILURE;
+	}
 
 	t_player player;
 	initPlayer(&player, &map);
@@ -104,5 +140,5 @@ int	main(int argc, char **argv)
 	setWindowHooks(&keyHandlerParam);
 	mlx_loop(mlx);
 
-	return 0;
+	return EXIT_SUCCESS;
 }

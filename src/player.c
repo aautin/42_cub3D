@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
+/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:41:18 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/17 01:23:30 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/23 18:40:02 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft_extended.h"
+#include "libft.h"
 
 #include "map.h"
 #include "player.h"
 
-static void	initPlayerPosition(t_player *player, t_map *map)
+static void	initPlayerPosition(t_player *player, t_formattedMap *map)
 {
 	int	rowI = 0;
-	while (rowI < map->ySize)
+	while (map->area[rowI] != NULL)
 	{
 		int	columnI = 0;
-		while (columnI < map->xSize)
+		while (columnI < map->xSize[rowI])
 		{
-			if (ft_strchr("01", map->content[rowI][columnI]) == NULL)	
+			if (ft_strchr("01", map->area[rowI][columnI]) == NULL)	
 			{
 				player->xPosition = columnI;
 				player->yPosition = rowI;
@@ -59,10 +59,10 @@ static void	initPlayerDirection(t_player *player, int direction)
 	}
 }
 
-void	initPlayer(t_player *player, t_map *map)
+void	initPlayer(t_player *player, t_formattedMap *map)
 {
 	initPlayerPosition(player, map);
-	initPlayerDirection(player, map->content[player->yPosition][player->xPosition]);
+	initPlayerDirection(player, map->area[player->yPosition][player->xPosition]);
 	player->xCasePosition = 0.5;
 	player->yCasePosition = 0.5;
 }

@@ -6,11 +6,11 @@
 /*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 01:07:10 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/17 01:46:33 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/18 11:30:48 by alexandre        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft_extended.h"
+#include "ft_printf.h"
 #include "mlx_int.h"
 #include "mlx.h"
 
@@ -21,7 +21,7 @@
 #include "window.h"
 
 
-int		isKeycodeMakingPlayerMove(int keycode, t_map *map, t_player *player);
+int		isKeycodeMakingPlayerMove(int keycode, t_formattedMap *map, t_player *player);
 void	modifyPlayerPosition(int keycode, t_player *player);
 
 static int	keyHandler(int keycode, t_keyHandlerParam *param)
