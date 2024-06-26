@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/24 21:00:32 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/26 20:38:43 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	initTextureObjs(void *mlx, t_formattedMap *formatMap, t_identifiedMap *ident
 			&formatMap->textureObjsWidth[i], &formatMap->textureObjsHeight[i]);
 		if (newImage == NULL)
 		{
-			while (i-- > 0)
+			while (--i >= NORTH_INDEX)
 				mlx_destroy_image(mlx, formatMap->textureObjs[i]);
 			printf("%sAn error occured when turning %s to image\n",
 				ERROR_MSG, identMap->surfaces[i]);

@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/22 19:36:57 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/26 20:36:38 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	identifyComponents(t_identifiedMap *map, char **components, int lineI
 		surfaceIndex = getSurfaceIndex(components[0]);
 	if (surfaceIndex == NOT_FOUND)
 	{
-		printf("%sLine %d incorrect\n", ERROR_MSG, lineIndex);
+		printf("%sLine %d incorrect\n", ERROR_MSG, lineIndex + 1);
 		return NOT_FOUND;
 	}
 	surfaceComplement = ft_strdup(components[1]);

@@ -60,13 +60,13 @@ $(OBJ_PATH)/%.o	:	$(SRC_PATH)/%.c
 					@$(CC) $(CFLAGS) -c $< -o $@ -I$(LIBFT_INC) -I$(MLX_INC) -I$(INC_PATH)
 					@echo "$(GREEN)Compiled $(PURPLE)$<$(DEFAULT)"
 
-$(MLX)			:	$(MLX_PATH)
+$(MLX)			:	| $(MLX_PATH)
 					@make -s -C $(MLX_PATH)
 
 $(LIBFT)		:	$(LIBFT_PATH)
 					@make -s -C $(LIBFT_PATH)
 
-$(MLX_PATH)		:	$(MLX_TGZ)
+$(MLX_PATH)		:	| $(MLX_TGZ)
 					@if [ ! -d "$(MLX_PATH)" ]; then \
 						tar -x -f $(MLX_TGZ); \
 						echo "$(GREEN)Extracted $(PURPLE)$(MLX_TGZ)$(DEFAULT)"; \
