@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/24 20:18:55 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/26 18:55:18 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int	initIdentification(t_identifiedMap *map, char *mapFileName, char ***area)
 
 	t_list	*dataElements = NULL;
 	dataElements = file_to_lst(fd);
+	close(fd);
 
 	char	**mapContent = (char **) lst_to_double_tab(dataElements, NULL);
 	eraseNewlines(mapContent);

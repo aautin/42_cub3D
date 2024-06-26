@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:24:21 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/25 21:30:38 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/26 19:00:09 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,6 @@ static int	floodfill(t_formattedMap *map)
 	return EXIT_SUCCESS;
 }
 
-void	printfArea(char **area)
-{
-	for (int i = 0; area[i] != NULL; i++)
-	{
-		printf("%s\n", area[i]);
-	}
-}
-
 int	initArea(t_formattedMap *map)
 {
 	map->xSize = initAreaxSize(map->area);
@@ -119,7 +111,8 @@ int	initArea(t_formattedMap *map)
 		return EXIT_FAILURE;
 
 	int	status = floodfill(map);
+	if (status == EXIT_FAILURE)
+		free(map->xSize);
 
-	printfArea(map->area);
 	return status;
 }

@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/24 21:41:26 by aautin           ###   ########.fr       */
+/*   Updated: 2024/06/26 19:15:42 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int	initFormattedMap(void *mlx, t_formattedMap *map, char *mapFileName)
 		freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS);
 		return EXIT_FAILURE;
 	}
-	printIdentifiedMap(&identifiedMap);
 	if (initArea(map) == EXIT_FAILURE)
 	{
 		free_double_tab((void **) map->area, -1);
@@ -65,6 +64,5 @@ int	initFormattedMap(void *mlx, t_formattedMap *map, char *mapFileName)
 		freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS);
 		return EXIT_FAILURE;
 	}
-	freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS);
-	return EXIT_SUCCESS;
+	return freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS), EXIT_SUCCESS;
 }
