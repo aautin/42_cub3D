@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:35:25 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/29 20:30:32 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/01 23:37:55 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ typedef struct s_window {
 	int ySize;
 }	t_window;
 
-int	initWindow(t_window *window, void *mlx);
+void	initWindowHooks(void *mlx, t_window *window, t_formattedMap *map,
+			t_player *player);
+int		initWindow(void *mlx, t_window *window);
 
 #endif

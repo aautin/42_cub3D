@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:41:18 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/01 22:53:14 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/01 23:07:44 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void	initPlayer(t_player *player, t_formattedMap *map)
 		rowI++;
 	}
 	initPlayerDirection(player, map->player);
+	player->isMoving = FALSE;
+	player->isRotating = FALSE;
 }
 
 static void	keycodeToDirection(t_player *player, int keycode, double *xDirection, double *yDirection)
