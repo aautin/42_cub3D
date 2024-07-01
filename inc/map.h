@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/01 20:33:52 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/02 20:35:53 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,20 @@
 # define ERROR_MSG "Error\n"
 
 typedef enum e_identify_index {
-	C_INDEX,
-	F_INDEX,
-	NORTH_INDEX,
-	SOUTH_INDEX,
-	WEST_INDEX,
-	EAST_INDEX
+	C_IDENTIFY_INDEX,
+	F_IDENTIFY_INDEX,
+	NO_IDENTIFY_INDEX,
+	SO_IDENTIFY_INDEX,
+	WE_IDENTIFY_INDEX,
+	EA_IDENTIFY_INDEX
 }	t_identify_index;
+
+typedef enum e_format_index {
+	NO_FORMAT_INDEX,
+	SO_FORMAT_INDEX,
+	WE_FORMAT_INDEX,
+	EA_FORMAT_INDEX
+}	t_format_index;
 
 typedef struct s_rgb {
 	int	rCode;

@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/01 20:56:44 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/03 19:50:53 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,13 @@ static int	checkArgv(int argc, char **argv)
 	return SUCCESS;
 }
 
-void	freeGame(void *mlx, t_window *window, t_formattedMap *map)
+void	freeGame(void *mlx, t_window *window, t_formattedMap *map, t_handlerParam *param)
 {
-	if (map && mlx)
-		freeFormattedMap(mlx, map);
-	if (window && mlx)
-		mlx_destroy_window(mlx, window);
-	if (mlx)
-	{
-		mlx_destroy_display(mlx);
-		free(mlx);
-	}
-}
-
-void	printArea(char **area)
-{
-	for (int i = 0; area[i] != NULL; i++)
-	{
-		printf("%s\n", area[i]);
-	}
+	freeFormattedMap(mlx, map);
+	mlx_destroy_window(mlx, window->obj);
+	mlx_destroy_display(mlx);
+	free(mlx);
+	free(param);
 }
 
 int	main(int argc, char **argv)
@@ -75,20 +63,28 @@ int	main(int argc, char **argv)
 	t_formattedMap map;
 	if (initFormattedMap(mlx, &map, argv[1]) == FAILURE)
 	{
-		freeGame(mlx, NULL, NULL);
+		freeGame(mlx, NULL, NULL, NULL);
 		return EXIT_FAILURE;
 	}
+
+	t_player player;
+	initPlayer(&player, &map);
+	cleanArea(map.area, map.xSize);
 
 	t_window window;
-	if (initWindow(&window, mlx) == FAILURE)
+	if (initWindow(mlx, &window) == FAILURE)
 	{
-		freeGame(mlx, NULL, &map);
+		freeGame(mlx, NULL, &map, NULL);
 		return EXIT_FAILURE;
 	}
+	t_handlerParam *handlersParam = malloc(sizeof(*handlersParam));
+	handlersParam->mlx = mlx;
+	handlersParam->map = &map;
+	handlersParam->player = &player;
+	handlersParam->window = &window;
+	initWindowHooks(handlersParam);
 
-	cleanArea(map.area, map.xSize);
-	printArea(map.area);
 	mlx_loop(mlx);
-	freeGame(mlx, &window, &map);
+	freeGame(mlx, &window, &map, handlersParam);
 	return EXIT_SUCCESS;
 }

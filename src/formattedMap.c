@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/01 20:48:27 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/02 23:23:05 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 
 void	freeTextureObjs(void *mlx, void **textureObjs)
 {
-	int	i = NORTH_INDEX;
+	int	i = NO_FORMAT_INDEX;
 
-	while (i <= EAST_INDEX)
+	while (i <= EA_FORMAT_INDEX)
 	{
 		mlx_destroy_image(mlx, textureObjs[i]);
 		i++;
@@ -77,5 +77,5 @@ int	initFormattedMap(void *mlx, t_formattedMap *map, char *mapFileName)
 		freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS);
 		return FAILURE;
 	}
-	return freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS), EXIT_SUCCESS;
+	return freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS), SUCCESS;
 }

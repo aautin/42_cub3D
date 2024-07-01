@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/01 20:21:41 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/02 20:36:48 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 
 void	freeIdentifiedMap(t_identifiedMap *map, int status)
 {
-	t_identify_index	i = C_INDEX;
+	t_identify_index	i = C_IDENTIFY_INDEX;
 
-	while (i <= EAST_INDEX)
+	while (i <= EA_IDENTIFY_INDEX)
 	{
 		if (status & INDEX_TO_STATUS(i))
 			free(map->surfaces[i]);
@@ -88,7 +88,7 @@ static int	identifyArea(char **mapContent, int areaIndex, char ***areaPtr)
 	if (newPtr == NULL)
 	{
 		perror("identifyArea():malloc()");
-		return EXIT_FAILURE;
+		return FAILURE;
 	}
 	areaSize = 0;
 	while (mapContent[areaIndex + areaSize] != NULL)
@@ -101,7 +101,7 @@ static int	identifyArea(char **mapContent, int areaIndex, char ***areaPtr)
 		free(mapContent[areaIndex]);
 	free(mapContent);
 	*areaPtr = newPtr;
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }
 
 int	initIdentification(t_identifiedMap *map, char *mapFileName, char ***area)
@@ -110,7 +110,7 @@ int	initIdentification(t_identifiedMap *map, char *mapFileName, char ***area)
 	if (fd == -1)
 	{
 		printf(ERROR_MSG "Can't open or read the given file\n");
-		return EXIT_FAILURE;
+		return FAILURE;
 	}
 
 	t_list	*dataElements = NULL;
@@ -124,10 +124,10 @@ int	initIdentification(t_identifiedMap *map, char *mapFileName, char ***area)
 	ft_lstclear(&dataElements, NULL);
 
 	if (status == COMPLETE_STATUS && map->areaIndex != NOT_FOUND
-		&& identifyArea(mapContent, map->areaIndex, area) == EXIT_SUCCESS)
-		return EXIT_SUCCESS;
+		&& identifyArea(mapContent, map->areaIndex, area) == SUCCESS)
+		return SUCCESS;
 
 	free_double_tab((void **) mapContent, -1);
 	freeIdentifiedMap(map, status);
-	return EXIT_FAILURE;
+	return FAILURE;
 }
