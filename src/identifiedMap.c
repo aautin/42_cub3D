@@ -6,12 +6,15 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/26 18:55:18 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/01 20:21:41 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
+
 #include "libft.h"
-#include "get_next_line.h"
 #include "map.h"
 
 void	freeIdentifiedMap(t_identifiedMap *map, int status)

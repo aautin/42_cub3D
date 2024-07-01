@@ -25,7 +25,6 @@ MLX_NAME	:=	mlx
 
 SRC_FILES	:=	\
 				main.c				\
-				hook.c				\
 				formattedArea.c		\
 				formattedParts.c	\
 				formattedMap.c		\

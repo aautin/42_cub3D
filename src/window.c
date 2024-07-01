@@ -3,30 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   window.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
+/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:34:27 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/18 03:25:00 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/07/01 20:22:31 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <stdlib.h>
 
+#include "libft.h"
 #include "mlx.h"
-
 #include "window.h"
 
-int	initWindow(t_window *window, void *mlx, int xSize, int ySize)
+#define WINDOW_MIN_SIZE 480
+
+int	initWindow(t_window *window, void *mlx)
 {
-	
-	window->obj = mlx_new_window(mlx, xSize, ySize, "cub3D");
+	int	xScreenSize, yScreenSize;
+
+	mlx_get_screen_size(mlx, &xScreenSize, &yScreenSize);
+	if (xScreenSize < WINDOW_MIN_SIZE || yScreenSize < WINDOW_MIN_SIZE)
+	{
+		printf("Screen size isn't adapted for this program.\n");
+		return FAILURE;
+	}
+
+	window->obj = mlx_new_window(mlx, xScreenSize, yScreenSize, "cub3D");
 	if (window->obj == NULL)
 	{
 		perror("initWindow():mlx_new_window()");
-		return EXIT_FAILURE;
+		return FAILURE;
 	}
-	window->xSize = xSize;
-	window->ySize = ySize;
-	return EXIT_SUCCESS;
+	window->xSize = xScreenSize;
+	window->ySize = yScreenSize;
+	return SUCCESS;
 }

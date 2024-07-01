@@ -6,15 +6,15 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/26 20:38:43 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/01 20:18:28 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include <stdio.h>
+#include <unistd.h>
 
-#include "mlx.h"
 #include "map.h"
+#include "mlx.h"
 
 int	*initAreaxSize(char **area)
 {

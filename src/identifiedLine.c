@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/26 21:16:14 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/01 20:22:55 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,3 @@ int	identifyLine(t_identifiedMap *map, char *line, int lineIndex, int status)
 	free_double_tab((void **) lineComponents, -1);
 	return newStatus;
 }
-

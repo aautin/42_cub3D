@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
+/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:35:25 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/18 03:11:31 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/06/29 20:30:32 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,6 @@ typedef struct s_window {
 	int ySize;
 }	t_window;
 
-int	initWindow(t_window *window, void *mlx, int xSize, int ySize);
+int	initWindow(t_window *window, void *mlx);
 
 #endif
