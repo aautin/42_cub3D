@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/01 20:42:36 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/01 20:56:44 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,14 @@ void	freeGame(void *mlx, t_window *window, t_formattedMap *map)
 	}
 }
 
+void	printArea(char **area)
+{
+	for (int i = 0; area[i] != NULL; i++)
+	{
+		printf("%s\n", area[i]);
+	}
+}
+
 int	main(int argc, char **argv)
 {
 	if (checkArgv(argc, argv) == FAILURE)
@@ -77,7 +85,9 @@ int	main(int argc, char **argv)
 		freeGame(mlx, NULL, &map);
 		return EXIT_FAILURE;
 	}
-	
+
+	cleanArea(map.area, map.xSize);
+	printArea(map.area);
 	mlx_loop(mlx);
 	freeGame(mlx, &window, &map);
 	return EXIT_SUCCESS;

@@ -6,25 +6,18 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:42:11 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/01 20:23:42 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/01 22:47:23 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PLAYER_H
 # define PLAYER_H
 
-# define NORTH	'N'
-# define SOUTH	'S'
-# define WEST	'W'
-# define EAST	'E'
-
 typedef struct s_player {
-	int xPosition;
-	int yPosition;
-	float xDirection;
-	float yDirection;
-	float xCasePosition;
-	float yCasePosition;
+	double	xPosition;
+	double	yPosition;
+	float	xDirection;
+	float	yDirection;
 }	t_player;
 
 void	initPlayer(t_player *player, t_formattedMap *map);

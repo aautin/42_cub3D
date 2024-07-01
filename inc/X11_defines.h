@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hook.h                                             :+:      :+:    :+:   */
+/*   X11_defines.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/17 00:57:01 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/01 17:49:27 by aautin           ###   ########.fr       */
+/*   Created: 2024/06/17 00:59:31 by alexandre         #+#    #+#             */
+/*   Updated: 2024/07/01 22:43:09 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HOOK_H
-# define HOOK_H
+#ifndef X11_DEFINES_H
+# define X11_DEFINES_H
 
-# define DESTROY_WINDOW_EVENT   17
-# define DESTROY_WINDOW_MASK    0
-# define KEY_PRESSED_EVENT		2
-# define KEY_PRESSED_MASK		(1L<<0)
+# define XK_MISCELLANY
+# define XK_LATIN1
+
+# include <X11/X.h>
+# include <X11/keysymdef.h>
 
 #endif
