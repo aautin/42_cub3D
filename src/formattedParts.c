@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/01 20:18:28 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/01 20:49:59 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	initTextureObjs(void *mlx, t_formattedMap *formatMap, t_identifiedMap *ident
 	int 	i;
 
 	if (!arePathsAccessible(identMap->surfaces))
-		return EXIT_FAILURE;
+		return FAILURE;
 	i = NORTH_INDEX;
 	while (i <= EAST_INDEX)
 	{
@@ -72,12 +72,12 @@ int	initTextureObjs(void *mlx, t_formattedMap *formatMap, t_identifiedMap *ident
 				mlx_destroy_image(mlx, formatMap->textureObjs[i]);
 			printf("%sAn error occured when turning %s to image\n",
 				ERROR_MSG, identMap->surfaces[i]);
-			return EXIT_FAILURE;
+			return FAILURE;
 		}
 		formatMap->textureObjs[i] = newImage;
 		i++;
 	}
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }
 
 static int	initCode(t_rgb *codes, char **surfaces, int index)
@@ -86,14 +86,14 @@ static int	initCode(t_rgb *codes, char **surfaces, int index)
 	if (components == NULL)
 	{
 		perror("initCode():ft_split()");
-		return EXIT_FAILURE;
+		return FAILURE;
 	}
 	if (!components[0] || !components[1]
 		|| !components[2] || components[3])
 	{
 		printf(ERROR_MSG "The %s rgb-code has an incorrect format\n",
 				surfaces[index]);
-		return free_double_tab((void **) components, -1), EXIT_FAILURE;
+		return free_double_tab((void **) components, -1), FAILURE;
 	}
 	codes[index].rCode = ft_atoi(components[0]);
 	codes[index].gCode = ft_atoi(components[1]);
@@ -104,7 +104,7 @@ static int	initCode(t_rgb *codes, char **surfaces, int index)
 	{
 		printf(ERROR_MSG "The %s rgb-code has incorrect values\n",
 				surfaces[index]);
-		return free_double_tab((void **) components, -1), EXIT_FAILURE;
+		return free_double_tab((void **) components, -1), FAILURE;
 	}
 	return free_double_tab((void **) components, -1), EXIT_SUCCESS;
 }
@@ -115,9 +115,9 @@ int	initCodes(t_rgb *codes, char **surfaces)
 
 	while (i <= F_INDEX)
 	{
-		if (initCode(codes, surfaces, i) == EXIT_FAILURE)
-			return EXIT_FAILURE;
+		if (initCode(codes, surfaces, i) == FAILURE)
+			return FAILURE;
 		i++;
 	}
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }

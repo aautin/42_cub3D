@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/01 20:17:15 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/01 20:33:52 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ int		initTextureObjs(void *mlx, t_formattedMap *formatMap,
 int		initCodes(t_rgb *codes, char **surfaces);
 
 // formattedMap
+void	cleanArea(char **area, int *xSize);
+void	freeFormattedMap(void *mlx, t_formattedMap *map);
 int		initFormattedMap(void *mlx, t_formattedMap *map, char *mapFileName);
 
 #endif

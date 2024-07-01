@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/01 20:15:35 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/01 20:42:36 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,19 @@ static int	checkArgv(int argc, char **argv)
 	return SUCCESS;
 }
 
+void	freeGame(void *mlx, t_window *window, t_formattedMap *map)
+{
+	if (map && mlx)
+		freeFormattedMap(mlx, map);
+	if (window && mlx)
+		mlx_destroy_window(mlx, window);
+	if (mlx)
+	{
+		mlx_destroy_display(mlx);
+		free(mlx);
+	}
+}
+
 int	main(int argc, char **argv)
 {
 	if (checkArgv(argc, argv) == FAILURE)
@@ -54,19 +67,18 @@ int	main(int argc, char **argv)
 	t_formattedMap map;
 	if (initFormattedMap(mlx, &map, argv[1]) == FAILURE)
 	{
-		mlx_destroy_display(mlx);
-		free(mlx);
+		freeGame(mlx, NULL, NULL);
 		return EXIT_FAILURE;
 	}
 
 	t_window window;
 	if (initWindow(&window, mlx) == FAILURE)
 	{
-		// free map
-		mlx_destroy_display(mlx);
+		freeGame(mlx, NULL, &map);
 		return EXIT_FAILURE;
 	}
 	
 	mlx_loop(mlx);
+	freeGame(mlx, &window, &map);
 	return EXIT_SUCCESS;
 }

@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/01 20:22:55 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/01 20:36:43 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ static int	getSurfaceIndex(char *identifier)
 			return C_INDEX;
 		return F_INDEX;
 	}
-	if (identifier[0] == 'N' && identifier[0] == 'O')
+	if (identifier[0] == 'N' && identifier[1] == 'O')
 		return NORTH_INDEX;
-	if (identifier[0] == 'S' && identifier[0] == 'O')
+	if (identifier[0] == 'S' && identifier[1] == 'O')
 		return SOUTH_INDEX;
-	if (identifier[0] == 'W' && identifier[0] == 'E')
+	if (identifier[0] == 'W' && identifier[1] == 'E')
 		return WEST_INDEX;
-	if (identifier[0] == 'E' && identifier[0] == 'A')
+	if (identifier[0] == 'E' && identifier[1] == 'A')
 		return EAST_INDEX;
 	return NOT_FOUND;
 }
