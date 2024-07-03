@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:41:18 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/01 23:07:44 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/03 21:31:54 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,20 @@
 #include "map.h"
 #include "player.h"
 
+#define	STEP_LEN 0.1
+
 static void	initPlayerDirection(t_player *player, char direction)
 {
 	player->xDirection = 0;
 	player->yDirection = 0;
 	if (direction == 'N')
-		player->xDirection = -1;
+		player->xDirection = -1 * STEP_LEN;
 	else if (direction == 'S')
-		player->xDirection = 1;
+		player->xDirection = 1 * STEP_LEN;
 	else if (direction == 'W')
-		player->yDirection = -1;
+		player->yDirection = -1 * STEP_LEN;
 	else if (direction == 'E')
-		player->yDirection = 1;
+		player->yDirection = 1 * STEP_LEN;
 }
 
 void	initPlayer(t_player *player, t_formattedMap *map)

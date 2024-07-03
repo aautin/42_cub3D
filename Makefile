@@ -24,13 +24,14 @@ MLX			:=	$(MLX_PATH)/libmlx.a
 MLX_NAME	:=	mlx
 
 SRC_FILES	:=	\
-				main.c				\
 				formattedArea.c		\
-				formattedParts.c	\
 				formattedMap.c		\
+				formattedParts.c	\
 				identifiedLine.c	\
 				identifiedMap.c		\
+				main.c				\
 				player.c			\
+				raycasting.c		\
 				window.c			\
 
 OBJ_FILES	:=	$(SRC_FILES:.c=.o)
@@ -41,7 +42,7 @@ DEP			:=	$(OBJ:.o=.d)
 
 # ---------------------------------------- #
 CC			:=	cc
-CFLAGS		:=	-Wall -Werror -Wextra -g3 -MMD -MP
+CFLAGS		:=	-Wall -Werror -Wextra -g3 -MMD -MP -O3
 RM			:=	rm -rf
 LDFLAGS		:=	-L$(LIBFT_PATH) -L$(MLX_PATH) 
 LDLIBS		:=	-l$(LIBFT_NAME)  -l$(MLX_NAME) -lXext -lX11
