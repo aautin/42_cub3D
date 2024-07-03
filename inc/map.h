@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/24 21:00:50 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/02 20:35:53 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,20 @@
 # define ERROR_MSG "Error\n"
 
 typedef enum e_identify_index {
-	C_INDEX,
-	F_INDEX,
-	NORTH_INDEX,
-	SOUTH_INDEX,
-	WEST_INDEX,
-	EAST_INDEX
+	C_IDENTIFY_INDEX,
+	F_IDENTIFY_INDEX,
+	NO_IDENTIFY_INDEX,
+	SO_IDENTIFY_INDEX,
+	WE_IDENTIFY_INDEX,
+	EA_IDENTIFY_INDEX
 }	t_identify_index;
+
+typedef enum e_format_index {
+	NO_FORMAT_INDEX,
+	SO_FORMAT_INDEX,
+	WE_FORMAT_INDEX,
+	EA_FORMAT_INDEX
+}	t_format_index;
 
 typedef struct s_rgb {
 	int	rCode;
@@ -70,7 +77,8 @@ int		initTextureObjs(void *mlx, t_formattedMap *formatMap,
 int		initCodes(t_rgb *codes, char **surfaces);
 
 // formattedMap
-void	printIdentifiedMap(t_identifiedMap *identifiedMap);
+void	cleanArea(char **area, int *xSize);
+void	freeFormattedMap(void *mlx, t_formattedMap *map);
 int		initFormattedMap(void *mlx, t_formattedMap *map, char *mapFileName);
 
 #endif

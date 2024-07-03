@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   window.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandre <alexandre@student.42.fr>        +#+  +:+       +#+        */
+/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:35:25 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/18 03:11:31 by alexandre        ###   ########.fr       */
+/*   Updated: 2024/07/03 19:47:31 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef WINDOW_H
 # define WINDOW_H
+
+# include "map.h"
+# include "player.h"
+
+# define WINDOW_MIN_SIZE 480
 
 typedef struct s_window {
 	void *obj;
@@ -19,6 +24,14 @@ typedef struct s_window {
 	int ySize;
 }	t_window;
 
-int	initWindow(t_window *window, void *mlx, int xSize, int ySize);
+typedef struct s_handlerParam {
+	void 			*mlx;
+	t_formattedMap	*map;
+	t_player		*player;
+	t_window		*window;
+}	t_handlerParam;
+
+void	initWindowHooks(t_handlerParam *param);
+int		initWindow(void *mlx, t_window *window);
 
 #endif

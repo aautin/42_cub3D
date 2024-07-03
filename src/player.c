@@ -6,63 +6,100 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:41:18 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/23 18:40:02 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/01 23:07:44 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "X11_defines.h"
 #include "libft.h"
-
 #include "map.h"
 #include "player.h"
 
-static void	initPlayerPosition(t_player *player, t_formattedMap *map)
+static void	initPlayerDirection(t_player *player, char direction)
+{
+	player->xDirection = 0;
+	player->yDirection = 0;
+	if (direction == 'N')
+		player->xDirection = -1;
+	else if (direction == 'S')
+		player->xDirection = 1;
+	else if (direction == 'W')
+		player->yDirection = -1;
+	else if (direction == 'E')
+		player->yDirection = 1;
+}
+
+void	initPlayer(t_player *player, t_formattedMap *map)
 {
 	int	rowI = 0;
+
 	while (map->area[rowI] != NULL)
 	{
 		int	columnI = 0;
 		while (columnI < map->xSize[rowI])
 		{
-			if (ft_strchr("01", map->area[rowI][columnI]) == NULL)	
+			if (map->area[rowI][columnI ] == map->player)	
 			{
-				player->xPosition = columnI;
-				player->yPosition = rowI;
-				return ;
+				player->xPosition = columnI + 0.5;
+				player->yPosition = rowI + 0.5;
+				break ;
 			}
 			columnI++;
 		}
 		rowI++;
 	}
+	initPlayerDirection(player, map->player);
+	player->isMoving = FALSE;
+	player->isRotating = FALSE;
 }
 
-static void	initPlayerDirection(t_player *player, int direction)
+static void	keycodeToDirection(t_player *player, int keycode, double *xDirection, double *yDirection)
 {
-	if (direction == NORTH)
+	if (keycode == XK_w)
 	{
-		player->xDirection = -1;
-		player->yDirection = 0;
+		*xDirection = player->xDirection;
+		*yDirection = player->yDirection;
 	}
-	else if (direction == SOUTH)
+	else if (keycode == XK_s)
 	{
-		player->xDirection = 1;
-		player->yDirection = 0;
+		*xDirection = -player->xDirection;
+		*yDirection = -player->yDirection;
 	}
-	else if (direction == WEST)
+	else if (keycode == XK_a)
 	{
-		player->xDirection = 0;
-		player->yDirection = -1;
+		*xDirection = player->yDirection;
+		*yDirection = -player->xDirection;
 	}
-	else if (direction == EAST)
+	else if (keycode == XK_d)
 	{
-		player->xDirection = 0;
-		player->yDirection = 1;
+		*xDirection = -player->yDirection;
+		*yDirection = player->xDirection;
 	}
 }
 
-void	initPlayer(t_player *player, t_formattedMap *map)
+int	makePlayerMove(char **area, t_player *player, int keycode)
 {
-	initPlayerPosition(player, map);
-	initPlayerDirection(player, map->area[player->yPosition][player->xPosition]);
-	player->xCasePosition = 0.5;
-	player->yCasePosition = 0.5;
+	double	xDirection;
+	double	yDirection;
+	keycodeToDirection(player, keycode, &xDirection, &yDirection);
+
+	double	xNewPosition;
+	double	yNewPosition;
+	int		move = FAILURE;
+
+	xNewPosition = player->xPosition + xDirection;
+	yNewPosition = player->yPosition + yDirection;
+	if (area[(int)(player->yPosition)][(int)(xNewPosition)] != '\0'
+		&& area[(int)(player->yPosition)][(int)(xNewPosition)] != '1')
+	{
+		player->xPosition = xNewPosition;
+		move = SUCCESS;
+	}
+	if (area[(int)(yNewPosition)][(int)(player->xPosition)] != '\0'
+		&& area[(int)(yNewPosition)][(int)(player->xPosition)] != '1')
+	{
+		player->yPosition = yNewPosition;
+		move = SUCCESS;
+	}
+	return move;
 }

@@ -6,14 +6,13 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:24:21 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/26 20:43:18 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/01 20:16:18 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 
 #include "libft.h"
-
 #include "map.h"
 
 static int	initPlayer(char currentPosition, char *player)

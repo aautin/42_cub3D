@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/06/26 21:16:14 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/02 20:37:42 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,17 @@ static int	getSurfaceIndex(char *identifier)
 	if (identifierLen == 1)
 	{
 		if (*identifier == 'C')
-			return C_INDEX;
-		return F_INDEX;
+			return C_IDENTIFY_INDEX;
+		return F_IDENTIFY_INDEX;
 	}
-	if (identifier[0] == 'N' && identifier[0] == 'O')
-		return NORTH_INDEX;
-	if (identifier[0] == 'S' && identifier[0] == 'O')
-		return SOUTH_INDEX;
-	if (identifier[0] == 'W' && identifier[0] == 'E')
-		return WEST_INDEX;
-	if (identifier[0] == 'E' && identifier[0] == 'A')
-		return EAST_INDEX;
+	if (identifier[0] == 'N' && identifier[1] == 'O')
+		return NO_IDENTIFY_INDEX;
+	if (identifier[0] == 'S' && identifier[1] == 'O')
+		return SO_IDENTIFY_INDEX;
+	if (identifier[0] == 'W' && identifier[1] == 'E')
+		return WE_IDENTIFY_INDEX;
+	if (identifier[0] == 'E' && identifier[1] == 'A')
+		return EA_IDENTIFY_INDEX;
 	return NOT_FOUND;
 }
 
@@ -83,4 +83,3 @@ int	identifyLine(t_identifiedMap *map, char *line, int lineIndex, int status)
 	free_double_tab((void **) lineComponents, -1);
 	return newStatus;
 }
-
