@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:34:27 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/03 22:32:49 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/04 22:57:30 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int keyReleaseHandler(int keycode, t_player *player)
 int	raycasting(void *mlx, t_window *window, t_formattedMap *map, t_player *player);
 static int	gameEventsHandler(t_handlerParam *param)
 {
-	usleep(2000);
+	usleep(10000);
 	int	mustUpdateWindow = FALSE;
 
 	if (param->player->isMoving)

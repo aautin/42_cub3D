@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 20:37:26 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/03 22:38:17 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/04 23:14:30 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include "window.h"
 
 #define ABS(value)	((value > 0) ? value : -value)
-#define PLANE_LEN	0.66
 
 typedef enum e_color
 {
@@ -44,10 +43,13 @@ static void	putPixel(void *img, int x, int y, int color)
 	*(int *)(buffer + y * line_len + x * (bpp / sizeof(int))) = color;
 }
 
-static void	verLine(void *img, int x, int drawStart, int drawEnd, t_formattedMap *map, int yWindowSize)
+static void	verLine(void *img, int x, int drawStart, int drawEnd,
+	t_formattedMap *map, int yWindowSize, int side)
 {
 	for (int i = 0; i < drawStart; i++)
 		putPixel(img, x, i, rgbtoi(&map->codes[C_IDENTIFY_INDEX]));
+	while (drawStart < drawEnd)
+		putPixel(img, x, drawStart++, 0xffff02 / (1 + side));
 	while (drawEnd < yWindowSize)
 		putPixel(img, x, drawEnd++, rgbtoi(&map->codes[F_IDENTIFY_INDEX]));
 }
@@ -55,15 +57,16 @@ static void	verLine(void *img, int x, int drawStart, int drawEnd, t_formattedMap
 int	raycasting(void *mlx, t_window *window, t_formattedMap *map, t_player *player)
 {
 	void *img = mlx_new_image(mlx, window->xSize, window->ySize);
-
 	double planeX = -player->yDirection, planeY = player->xDirection;
+	
 	for (int x = 0; x < window->xSize; x++)
     {
 		//calculate ray position and direction
-		double cameraX = (x * 2 / (double)(window->xSize)) - 1;
+		double cameraX = x * 2 / (double)(window->xSize) - 1;
 		double rayDirX = player->xDirection + planeX * cameraX;
 		double rayDirY = player->yDirection + planeY * cameraX;
-
+		printf("rayDirX:%f|rayDirY:%f\n", rayDirX, rayDirY);
+		
 		//which box of the map we're in
 		int mapX = (int)(player->xPosition);
 		int mapY = (int)(player->yPosition);
@@ -78,7 +81,7 @@ int	raycasting(void *mlx, t_window *window, t_formattedMap *map, t_player *playe
 		double perpWallDist;
 
 		//what direction to step in x or y-direction (either +1 or -1)
-		int stepX;
+		int stepX; 
 		int stepY;
 
 		int hit = 0; //was there a wall hit?
@@ -128,8 +131,10 @@ int	raycasting(void *mlx, t_window *window, t_formattedMap *map, t_player *playe
 		}
 		
 		//Calculate distance projected on camera direction (Euclidean distance would give fisheye effect!)
-		if (side == 0) perpWallDist = (sideDistX - deltaDistX);
-		else          perpWallDist = (sideDistY - deltaDistY);
+		if (side == 0)
+			perpWallDist = (sideDistX - deltaDistX);
+		else
+			perpWallDist = (sideDistY - deltaDistY);
 
 		//Calculate height of line to draw on screen
 		int lineHeight = (int)(window->ySize / perpWallDist);
@@ -143,7 +148,7 @@ int	raycasting(void *mlx, t_window *window, t_formattedMap *map, t_player *playe
 		if (drawEnd >= window->ySize) drawEnd = window->ySize - 1;
 
 		//draw the pixels of the stripe as a vertical line
-		verLine(img, x, drawStart, drawEnd, map, window->ySize);
+		verLine(img, x, drawStart, drawEnd, map, window->ySize, side);
 	}
 	mlx_put_image_to_window(mlx, window->obj, img, 0, 0);
 	return SUCCESS;

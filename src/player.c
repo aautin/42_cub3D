@@ -6,29 +6,31 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:41:18 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/03 21:31:54 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/04 22:55:16 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stdio.h>
 
 #include "X11_defines.h"
 #include "libft.h"
 #include "map.h"
 #include "player.h"
 
-#define	STEP_LEN 0.1
+#define	STEP_LEN 0.64
 
 static void	initPlayerDirection(t_player *player, char direction)
 {
 	player->xDirection = 0;
 	player->yDirection = 0;
 	if (direction == 'N')
-		player->xDirection = -1 * STEP_LEN;
+		player->yDirection = -1;
 	else if (direction == 'S')
-		player->xDirection = 1 * STEP_LEN;
+		player->yDirection = 1;
 	else if (direction == 'W')
-		player->yDirection = -1 * STEP_LEN;
+		player->xDirection = -1;
 	else if (direction == 'E')
-		player->yDirection = 1 * STEP_LEN;
+		player->xDirection = 1;
 }
 
 void	initPlayer(t_player *player, t_formattedMap *map)
@@ -59,23 +61,23 @@ static void	keycodeToDirection(t_player *player, int keycode, double *xDirection
 {
 	if (keycode == XK_w)
 	{
-		*xDirection = player->xDirection;
-		*yDirection = player->yDirection;
+		*xDirection = player->xDirection * STEP_LEN;
+		*yDirection = player->yDirection * STEP_LEN;
 	}
 	else if (keycode == XK_s)
 	{
-		*xDirection = -player->xDirection;
-		*yDirection = -player->yDirection;
+		*xDirection = -player->xDirection * STEP_LEN;
+		*yDirection = -player->yDirection * STEP_LEN;
 	}
 	else if (keycode == XK_a)
 	{
-		*xDirection = player->yDirection;
-		*yDirection = -player->xDirection;
+		*xDirection = player->yDirection * STEP_LEN;
+		*yDirection = -player->xDirection * STEP_LEN;
 	}
 	else if (keycode == XK_d)
 	{
-		*xDirection = -player->yDirection;
-		*yDirection = player->xDirection;
+		*xDirection = -player->yDirection * STEP_LEN;
+		*yDirection = player->xDirection * STEP_LEN;
 	}
 }
 

@@ -68,16 +68,15 @@ void	verLine(void *img, int x, int drawStart, int drawEnd, int color)
 		putPixel(img, x, drawEnd++, FLOOR_COLOR);
 }
 
-
 int main()
 {
 	void *mlxPtr = mlx_init();
 	void *window = mlx_new_window(mlxPtr, screenWidth, screenHeight, "test");
 	void *img = mlx_new_image(mlxPtr, screenWidth, screenHeight);
 
-	double posX = 14, posY = 10;  //x and y start position
-	double dirX = -1, dirY = 0; //initial direction vector
-	double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
+	double posX = 11, posY = 12;  //x and y start position
+	double dirX = 0, dirY = -1; //initial direction vector
+	double planeX = 0.66, planeY = 0; //the 2d raycaster version of camera plane
 
 	for(int x = 0; x < screenWidth; x++)
     {
@@ -152,8 +151,9 @@ int main()
 
 		if (side == 0) perpWallDist = (sideDistX - deltaDistX);
 		else          perpWallDist = (sideDistY - deltaDistY);
-
 		//Calculate height of line to draw on screen
+		#include <stdio.h>
+		printf("wall dist: %f\n", perpWallDist);
 		int lineHeight = (int)(screenHeight / perpWallDist);
 		if (lineHeight < 0)
 			lineHeight = INT_MAX;
