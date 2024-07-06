@@ -30,8 +30,6 @@ SRC_FILES	:=	\
 				formattedMap.c		\
 				identifiedLine.c	\
 				identifiedMap.c		\
-				player.c			\
-				window.c			\
 
 OBJ_FILES	:=	$(SRC_FILES:.c=.o)
 

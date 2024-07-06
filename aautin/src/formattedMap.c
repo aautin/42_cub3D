@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/02 23:23:05 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/06 20:50:29 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 
 void	freeTextureObjs(void *mlx, void **textureObjs)
 {
-	int	i = NO_FORMAT_INDEX;
+	t_index	i = NO_INDEX;
 
-	while (i <= EA_FORMAT_INDEX)
+	while (i <= EA_INDEX)
 	{
 		mlx_destroy_image(mlx, textureObjs[i]);
 		i++;
