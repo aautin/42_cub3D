@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   formattedMap.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
+/*   By: aautin <aautin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/06 20:50:29 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/08 00:33:04 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	freeFormattedMap(void *mlx, t_formattedMap *map)
 {
 	free_double_tab((void **) map->area, -1);
 	freeTextureObjs(mlx, map->textureObjs);
-	free(map->xSize);
 }
 
 int	initFormattedMap(void *mlx, t_formattedMap *map, char *mapFileName)

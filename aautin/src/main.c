@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
+/*   By: aautin <aautin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/06 20:59:25 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/08 00:35:11 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int	main(int argc, char **argv)
 		return EXIT_FAILURE;
 	}
 
-	cleanArea(map.area, map.xSize);
 	// ... include enorie's part there.
 	freeFormattedMap(mlx, &map);
 	mlx_destroy_display(mlx);

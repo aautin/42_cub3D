@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   formattedArea.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
+/*   By: aautin <aautin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:24:21 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/01 20:16:18 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/08 00:34:43 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,16 @@ static int	initPlayer(char currentPosition, char *player)
 		if (*player)
 		{
 			printf(ERROR_MSG "Map has several players\n");
-			return EXIT_FAILURE;		
+			return FAILURE;		
 		}
 		*player = currentPosition;
 	}
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }
 
 static int	floodchar(int *xSize, char **area, int lineI, int colI)
 {
-	int	status = EXIT_FAILURE;
+	int	status = FAILURE;
 
 	if (lineI - 1 < 0 || xSize[lineI - 1] - 1 < colI 
 		|| area[lineI + 1] == NULL || xSize[lineI + 1] - 1 < colI
@@ -41,7 +41,7 @@ static int	floodchar(int *xSize, char **area, int lineI, int colI)
 	{
 		if (area[lineI + step][colI] && ft_strchr("0 ", area[lineI + step][colI]) != NULL)
 		{
-			status = EXIT_SUCCESS;
+			status = SUCCESS;
 			area[lineI + step][colI] = 'T';
 		}
 	}
@@ -49,28 +49,28 @@ static int	floodchar(int *xSize, char **area, int lineI, int colI)
 	{
 		if (area[lineI + step][colI] && ft_strchr("0 ", area[lineI][colI + step]) != NULL)
 		{
-			status = EXIT_SUCCESS;
+			status = SUCCESS;
 			area[lineI][colI + step] = 'T';
 		}
 	}
 	return status;
 }
 
-static int	floodline(t_formattedMap *map, char **area, int lineI, int *expansion)
+static int	floodline(t_formattedMap *map, char **area, int lineI, int *expansion, int *xSize)
 {
 	int	colI = 0;
 
 	while (area[lineI][colI] != '\0')
 	{
-		if (initPlayer(area[lineI][colI], &map->player) == EXIT_FAILURE)
-			return EXIT_FAILURE;
+		if (initPlayer(area[lineI][colI], &map->player) == FAILURE)
+			return FAILURE;
 		if (ft_strchr("NSWET", area[lineI][colI]) != NULL)
 		{
-			int	flood_status = floodchar(map->xSize, area, lineI, colI);
+			int	flood_status = floodchar(xSize, area, lineI, colI);
 			if (flood_status == NOT_FOUND)
 			{
 				printf(ERROR_MSG "Map isn't closed\n");
-				return EXIT_FAILURE;
+				return FAILURE;
 			}
 			if (flood_status == EXIT_SUCCESS)
 				*expansion = TRUE;
@@ -78,14 +78,14 @@ static int	floodline(t_formattedMap *map, char **area, int lineI, int *expansion
 		else if (ft_strchr("10 ", area[lineI][colI]) == NULL)
 		{
 			printf(ERROR_MSG "Map has wrong chars\n");
-			return EXIT_FAILURE;
+			return FAILURE;
 		}
 		colI++;
 	}
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }
 
-static int	floodfill(t_formattedMap *map)
+static int	floodfill(t_formattedMap *map, int *xSize)
 {
 	int expansion = TRUE;
 	while (expansion == TRUE)
@@ -95,28 +95,27 @@ static int	floodfill(t_formattedMap *map)
 		int	i = 0;
 		while (map->area[i] != NULL)
 		{
-			if (floodline(map, map->area, i, &expansion) == EXIT_FAILURE)
-				return EXIT_FAILURE;
+			if (floodline(map, map->area, i, &expansion, xSize) == FAILURE)
+				return FAILURE;
 			i++;
 		}
 		if (!map->player)
 		{
 			printf(ERROR_MSG "Map has no player\n");
-			return EXIT_FAILURE;
+			return FAILURE;
 		}
 	}
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }
 
 int	initArea(t_formattedMap *map)
 {
-	map->xSize = initAreaxSize(map->area);
-	if (map->xSize == NULL)
+	int *xSize = initAreaxSize(map->area);
+	if (xSize == NULL)
 		return EXIT_FAILURE;
-
-	int	status = floodfill(map);
-	if (status == EXIT_FAILURE)
-		free(map->xSize);
+	int	status = floodfill(map, xSize);
+	cleanArea(map->area, xSize);
+	free(xSize);
 
 	return status;
 }
