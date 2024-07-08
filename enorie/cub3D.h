@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 13:41:02 by enorie            #+#    #+#             */
-/*   Updated: 2024/07/02 21:26:26 by root             ###   ########.fr       */
+/*   Updated: 2024/07/08 11:32:53 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,5 +131,6 @@ void	ft_move_right(t_all *all);
 void	ft_init_pixels(t_all *all, t_raycast *rc);
 t_all	*ft_init_strucks(void);
 int		ft_init_map(t_map *map);
+int		mouse_move(t_all *all);
 
 #endif

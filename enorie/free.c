@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 20:04:07 by root              #+#    #+#             */
-/*   Updated: 2024/07/02 21:31:17 by root             ###   ########.fr       */
+/*   Updated: 2024/07/08 12:40:58 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	ft_free_map(t_all *all)
 
 void	ft_free_all(t_all *all)
 {
+	if (all->vars->win)
+		mlx_destroy_window(all->vars->mlx, all->vars->win);
 	ft_free_map(all);
 	if (all->pos)
 		free(all->pos);

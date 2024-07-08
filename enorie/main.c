@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:52:34 by enorie            #+#    #+#             */
-/*   Updated: 2024/07/06 15:30:18 by root             ###   ########.fr       */
+/*   Updated: 2024/07/08 12:37:04 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,9 +141,13 @@ int	main(int argc, char **argv)
 		&(all->vars)->sizey);
 	all->vars->win = mlx_new_window(all->vars->mlx, all->vars->sizex,
 			all->vars->sizey, "Cub3D");
+	mlx_mouse_hide(all->vars->mlx, all->vars->win);
+	mlx_mouse_move(all->vars->mlx, all->vars->win,
+		all->vars->sizex / 2, all->vars->sizey / 2);
 	ft_cubed(all);
 	mlx_hook(all->vars->win, 2, 1L << 0, key_hook, all);
 	mlx_hook(all->vars->win, 17, 0, end, all->vars);
+	mlx_loop_hook(all->vars->mlx, &mouse_move, all);
 	mlx_loop(all->vars->mlx);
 	return (ft_free_all(all), 0);
 }
