@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/06 20:56:03 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/08 14:04:15 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,36 +54,31 @@ static int	arePathsAccessible(char **texturesPaths)
 	return TRUE;
 }
 
-int	initTextureObjs(void *mlx, t_formattedMap *formatMap, t_identifiedMap *identMap)
+int	initTextureObjs(void *mlx, t_map *map, t_identifiedMap *identMap)
 {
-	void	*newImage;
 	t_index i;
-	int	newIndex;
 
 	if (!arePathsAccessible(identMap->surfaces))
 		return FAILURE;
 	i = NO_INDEX;
-	newIndex = 0;
 	while (i <= EA_INDEX)
 	{
-		newImage = mlx_xpm_file_to_image(mlx, identMap->surfaces[i],
-			&formatMap->textureObjsWidth[newIndex], &formatMap->textureObjsHeight[newIndex]);
-		if (newImage == NULL)
+		map->textures[i].obj = mlx_xpm_file_to_image(mlx, identMap->surfaces[i],
+			&map->textures[i].width, &map->textures[i].height);
+		if (map->textures[i].obj == NULL)
 		{
-			while (--newIndex >= 0)
-				mlx_destroy_image(mlx, formatMap->textureObjs[newIndex]);
+			while (--i >= NO_INDEX)
+				mlx_destroy_image(mlx, map->textures[i].obj);
 			printf("%sAn error occured when turning %s to image\n",
 				ERROR_MSG, identMap->surfaces[i]);
 			return FAILURE;
 		}
-		formatMap->textureObjs[newIndex] = newImage;
 		i++;
-		newIndex++;
 	}
 	return SUCCESS;
 }
 
-static int	initCode(t_rgb *codes, char **surfaces, int index)
+static int	initCode(int codes[], char **surfaces, int index)
 {
 	char	**components = ft_split(surfaces[index], ',');
 	if (components == NULL)
@@ -98,27 +93,27 @@ static int	initCode(t_rgb *codes, char **surfaces, int index)
 				surfaces[index]);
 		return free_double_tab((void **) components, -1), FAILURE;
 	}
-	codes[index - C_INDEX].rCode = ft_atoi(components[0]);
-	codes[index - C_INDEX].gCode = ft_atoi(components[1]);
-	codes[index - C_INDEX].bCode = ft_atoi(components[2]);
-	if (codes[index - C_INDEX].rCode != (unsigned char) codes[index - C_INDEX].rCode
-		|| codes[index - C_INDEX].gCode != (unsigned char) codes[index - C_INDEX].gCode
-		|| codes[index - C_INDEX].bCode != (unsigned char) codes[index - C_INDEX].bCode)
+	if (ft_atoi(components[0]) != (unsigned char) ft_atoi(components[0])
+		|| ft_atoi(components[1]) != (unsigned char) ft_atoi(components[1])
+		|| ft_atoi(components[2]) != (unsigned char) ft_atoi(components[2]))
 	{
 		printf(ERROR_MSG "The %s rgb-code has incorrect values\n",
 				surfaces[index]);
 		return free_double_tab((void **) components, -1), FAILURE;
 	}
-	return free_double_tab((void **) components, -1), EXIT_SUCCESS;
+	codes[index] = ((ft_atoi(components[0]) & 0x0ff) << 16)
+		| ((ft_atoi(components[1]) & 0x0ff) << 8)
+		| ((ft_atoi(components[2]) & 0x0ff) << 0);
+	return free_double_tab((void **) components, -1), SUCCESS;
 }
 
-int	initCodes(t_rgb *codes, char **surfaces)
+int	initCodes(int codes[], char **surfaces)
 {
 	t_index	i = C_INDEX;
 
 	while (i <= F_INDEX)
 	{
-		if (initCode(codes, surfaces, i) == FAILURE)
+		if (initCode(codes, surfaces + SHIFT, i - SHIFT) == FAILURE)
 			return FAILURE;
 		i++;
 	}

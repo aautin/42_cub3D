@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   formattedArea.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aautin <aautin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:24:21 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/08 00:34:43 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/08 13:22:10 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	floodchar(int *xSize, char **area, int lineI, int colI)
 	return status;
 }
 
-static int	floodline(t_formattedMap *map, char **area, int lineI, int *expansion, int *xSize)
+static int	floodline(t_map *map, char **area, int lineI, int *expansion, int *xSize)
 {
 	int	colI = 0;
 
@@ -85,7 +85,7 @@ static int	floodline(t_formattedMap *map, char **area, int lineI, int *expansion
 	return SUCCESS;
 }
 
-static int	floodfill(t_formattedMap *map, int *xSize)
+static int	floodfill(t_map *map, int *xSize)
 {
 	int expansion = TRUE;
 	while (expansion == TRUE)
@@ -108,7 +108,7 @@ static int	floodfill(t_formattedMap *map, int *xSize)
 	return SUCCESS;
 }
 
-int	initArea(t_formattedMap *map)
+int	initArea(t_map *map)
 {
 	int *xSize = initAreaxSize(map->area);
 	if (xSize == NULL)
