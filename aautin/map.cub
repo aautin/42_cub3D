@@ -1,12 +1,10 @@
-NO ./textures/ancientstone.xpm
+NO ./cub3D/aautin/textures/ancientstone.xpm
 
-SO ./textures/bluestone.xpm
-WE    ./textures/brick.xpm
-EA ./textures/wallhole.xpm
+SO ./cub3D/aautin/textures/bluestone.xpm
+WE    ./cub3D/aautin/textures/brick.xpm
+EA ./cub3D/aautin/textures/wallhole.xpm
    F   220,100,0
 C  225,30,0
-
-
 
 
 11111111111111111111111111111111

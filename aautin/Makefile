@@ -26,6 +26,8 @@ MLX_NAME	:=	mlx
 SRC_FILES	:=	\
 				main.c				\
 				formattedArea.c		\
+				cub3D.c	\
+				player.c	\
 				formattedParts.c	\
 				formattedMap.c		\
 				identifiedLine.c	\

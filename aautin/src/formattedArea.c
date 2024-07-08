@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:24:21 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/08 13:22:10 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/08 17:31:18 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,33 @@
 
 #include "libft.h"
 #include "map.h"
+#include "player.h"
 
-static int	initPlayer(char currentPosition, char *player)
+static int	check_player(char **area)
 {
-	if (ft_strchr("NSWE", currentPosition) != NULL)
+	char	player;
+	int		x;
+	int		y;
+
+	player = 0;
+	y = 0;
+	while (area[y] != NULL)
 	{
-		if (*player)
+		x = 0;
+		while (area[y][x] != '\0')
 		{
-			printf(ERROR_MSG "Map has several players\n");
-			return FAILURE;		
+			if (ft_strchr("NSWE", area[y][x]) != NULL && player)
+				return (printf(ERROR_MSG "Map has several players\n"), FAILURE);
+			else if (ft_strchr("NSWE", area[y][x]))
+				player = area[y][x];
+			x++;
 		}
-		*player = currentPosition;
+		y++;
+	}
+	if (!player)
+	{
+		printf(ERROR_MSG "Map has no player\n");
+		return FAILURE;
 	}
 	return SUCCESS;
 }
@@ -56,17 +72,15 @@ static int	floodchar(int *xSize, char **area, int lineI, int colI)
 	return status;
 }
 
-static int	floodline(t_map *map, char **area, int lineI, int *expansion, int *xSize)
+static int	floodline(t_map *map, int lineI, int *expansion, int *xSize)
 {
 	int	colI = 0;
 
-	while (area[lineI][colI] != '\0')
+	while (map->area[lineI][colI] != '\0')
 	{
-		if (initPlayer(area[lineI][colI], &map->player) == FAILURE)
-			return FAILURE;
-		if (ft_strchr("NSWET", area[lineI][colI]) != NULL)
+		if (ft_strchr("NSWET", map->area[lineI][colI]) != NULL)
 		{
-			int	flood_status = floodchar(xSize, area, lineI, colI);
+			int	flood_status = floodchar(xSize, map->area, lineI, colI);
 			if (flood_status == NOT_FOUND)
 			{
 				printf(ERROR_MSG "Map isn't closed\n");
@@ -75,7 +89,7 @@ static int	floodline(t_map *map, char **area, int lineI, int *expansion, int *xS
 			if (flood_status == EXIT_SUCCESS)
 				*expansion = TRUE;
 		}
-		else if (ft_strchr("10 ", area[lineI][colI]) == NULL)
+		else if (ft_strchr("10 ", map->area[lineI][colI]) == NULL)
 		{
 			printf(ERROR_MSG "Map has wrong chars\n");
 			return FAILURE;
@@ -88,34 +102,33 @@ static int	floodline(t_map *map, char **area, int lineI, int *expansion, int *xS
 static int	floodfill(t_map *map, int *xSize)
 {
 	int expansion = TRUE;
+
 	while (expansion == TRUE)
 	{
-		map->player = 0;
 		expansion = FALSE;
 		int	i = 0;
 		while (map->area[i] != NULL)
 		{
-			if (floodline(map, map->area, i, &expansion, xSize) == FAILURE)
+			if (floodline(map, i, &expansion, xSize) == FAILURE)
 				return FAILURE;
 			i++;
-		}
-		if (!map->player)
-		{
-			printf(ERROR_MSG "Map has no player\n");
-			return FAILURE;
 		}
 	}
 	return SUCCESS;
 }
 
-int	initArea(t_map *map)
+int	initArea(t_map *map, t_player *player)
 {
 	int *xSize = initAreaxSize(map->area);
 	if (xSize == NULL)
 		return EXIT_FAILURE;
-	int	status = floodfill(map, xSize);
-	cleanArea(map->area, xSize);
+	if (floodfill(map, xSize) == SUCCESS && check_player(map->area) == SUCCESS)
+	{
+		init_player(player, map->area);
+		cleanArea(map->area, xSize);
+		free(xSize);
+		return SUCCESS;
+	}
 	free(xSize);
-
-	return status;
+	return FAILURE;
 }

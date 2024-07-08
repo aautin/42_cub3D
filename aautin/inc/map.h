@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/08 14:22:30 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/08 17:18:10 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "data.h"
 # include "libft.h"
+# include "player.h"
 
 # define INDEX_TO_STATUS(index) (1 << (index))
 # define NOT_FOUND -1
@@ -31,7 +32,6 @@ typedef enum e_index {
 	SHIFT = C_INDEX
 }	t_index;
 
-
 typedef struct s_identifiedMap {
 	char	*surfaces[6];
 	int		areaIndex;
@@ -41,7 +41,6 @@ typedef struct s_map {
 	t_data	textures[4];
 	int		codes[2];
 	char	**area;
-	char	player;
 }	t_map;
 
 // identifyLine
@@ -55,7 +54,7 @@ int		initIdentification(t_identifiedMap *identifiedMap, char *mapFileName,
 			char ***areaPtr);
 
 // formattedArea
-int		initArea(t_map *map);
+int		initArea(t_map *map, t_player *player);
 
 // formattedParts
 int		*initAreaxSize(char **area);
@@ -64,9 +63,9 @@ int		initTextureObjs(void *mlx, t_map *formatMap,
 int		initCodes(int codes[], char **surfaces);
 
 // formattedMap
+void	free_textures(void *mlx, t_data textures[]);
 void	cleanArea(char **area, int *xSize);
-void	freeTextureObjs(void *mlx, t_data textures[]);
-void	freeFormattedMap(void *mlx, t_map *map);
-int		initFormattedMap(void *mlx, t_map *map, char *mapFileName);
+void	free_map(void *mlx, t_map *map);
+int		initFormattedMap(void *mlx, t_map *map, char *mapFileName, t_player *player);
 
 #endif

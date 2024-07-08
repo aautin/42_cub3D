@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/08 13:22:10 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/08 18:56:46 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 #include "map.h"
 #include "mlx.h"
+#include "player.h"
+#include "cub3D.h"
 
 static int	checkArgv(int argc, char **argv)
 {
@@ -22,7 +24,7 @@ static int	checkArgv(int argc, char **argv)
 		printf(ERROR_MSG "Wrong number of arguments\n");
 		return FAILURE;
 	}
-	
+
 	char *fileExtension = ft_strrchr(argv[1], '.');
 	if (fileExtension == argv[1] || fileExtension == NULL)
 	{
@@ -42,24 +44,27 @@ int	main(int argc, char **argv)
 	if (checkArgv(argc, argv) == FAILURE)
 		return EXIT_FAILURE;
 
-	void *mlx = mlx_init();
-	if (mlx == NULL)
+	t_vars vars;
+	if (init_vars(&vars) == FAILURE)
+		return EXIT_FAILURE;
+
+	t_player player;
+	t_map map;
+	if (initFormattedMap(vars.mlx, &map, argv[1], &player) == FAILURE)
 	{
-		perror("main():mlx_init()");
+		free_vars(&vars);
 		return EXIT_FAILURE;
 	}
 
-	t_map map;
-	if (initFormattedMap(mlx, &map, argv[1]) == FAILURE)
+	t_objs objs;
+	if (init_objs(&objs, &vars, &player, &map) == FAILURE)
 	{
-		mlx_destroy_display(mlx);
-		free(mlx);
+		free_map(vars.mlx, &map);
+		free_vars(&vars); 
 		return EXIT_FAILURE;
 	}
 
 	// ... include enorie's part there.
-	freeFormattedMap(mlx, &map);
-	mlx_destroy_display(mlx);
-	free(mlx);
+	free_objs(&objs);
 	return EXIT_SUCCESS;
 }
