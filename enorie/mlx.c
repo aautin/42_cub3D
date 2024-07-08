@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 21:55:01 by root              #+#    #+#             */
-/*   Updated: 2024/07/08 12:47:56 by root             ###   ########.fr       */
+/*   Updated: 2024/07/08 13:55:54 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ int	mouse_move(t_all *all)
 
 	mlx_mouse_get_pos(all->vars->mlx, all->vars->win, &x, &y);
 	if (x > all->vars->sizex / 2 + 10)
-		ft_rotate(0.07, all);
+		ft_rotate(0.1, all);
 	if (x < all->vars->sizex / 2 - 10)
-		ft_rotate(-0.07, all);
+		ft_rotate(-0.1, all);
 	mlx_mouse_move(all->vars->mlx, all->vars->win,
 		all->vars->sizex / 2, all->vars->sizey / 2);
 	return (1);
