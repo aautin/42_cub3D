@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/02 20:37:42 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/06 21:09:43 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,17 @@ static int	getSurfaceIndex(char *identifier)
 	if (identifierLen == 1)
 	{
 		if (*identifier == 'C')
-			return C_IDENTIFY_INDEX;
-		return F_IDENTIFY_INDEX;
+			return C_INDEX;
+		return F_INDEX;
 	}
 	if (identifier[0] == 'N' && identifier[1] == 'O')
-		return NO_IDENTIFY_INDEX;
+		return NO_INDEX;
 	if (identifier[0] == 'S' && identifier[1] == 'O')
-		return SO_IDENTIFY_INDEX;
+		return SO_INDEX;
 	if (identifier[0] == 'W' && identifier[1] == 'E')
-		return WE_IDENTIFY_INDEX;
+		return WE_INDEX;
 	if (identifier[0] == 'E' && identifier[1] == 'A')
-		return EA_IDENTIFY_INDEX;
+		return EA_INDEX;
 	return NOT_FOUND;
 }
 
@@ -54,8 +54,15 @@ static int	identifyComponents(t_identifiedMap *map, char **components, int lineI
 		surfaceIndex = NOT_FOUND;
 	else
 		surfaceIndex = getSurfaceIndex(components[0]);
-	if (surfaceIndex == NOT_FOUND)
+	if (surfaceIndex == NOT_FOUND || (status & INDEX_TO_STATUS(surfaceIndex)))
 	{
+		printf(ERROR_MSG "Line %d incorrect\n", lineIndex + 1);
+		return NOT_FOUND;
+	}
+	if (status & INDEX_TO_STATUS(surfaceIndex))
+	{
+		free(map->surfaces[surfaceIndex]);
+		status = status ^ INDEX_TO_STATUS(surfaceIndex);
 		printf(ERROR_MSG "Line %d incorrect\n", lineIndex + 1);
 		return NOT_FOUND;
 	}
@@ -65,8 +72,6 @@ static int	identifyComponents(t_identifiedMap *map, char **components, int lineI
 		perror("identifyLine():ft_strdup()");
 		return NOT_FOUND;
 	}
-	if (status & INDEX_TO_STATUS(surfaceIndex))
-		free(map->surfaces[surfaceIndex]);
 	map->surfaces[surfaceIndex] = surfaceComplement;
 	return INDEX_TO_STATUS(surfaceIndex);
 }

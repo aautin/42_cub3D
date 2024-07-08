@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 13:26:06 by aautin            #+#    #+#             */
-/*   Updated: 2024/06/25 23:00:13 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/06 20:20:14 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,19 @@
 
 #define SHORT_LIMIT 32768
 
-t_list	*file_to_lst(int fd)
+t_list	*file_to_lst(char *filename)
 {
 	t_list			*lst;
 	t_list			*new;
 	char			*buffer;
 	unsigned int	lines_nb;
-
+	int const		fd = open(filename, O_RDONLY);
+	
+	if (fd == -1)
+	{
+		printf("Error\nCan't open or read %s\n", filename);
+		return NULL;
+	}
 	lst = NULL;
 	lines_nb = 0;
 	buffer = get_next_line(fd);

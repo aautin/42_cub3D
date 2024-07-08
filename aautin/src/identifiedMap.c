@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/02 20:36:48 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/06 20:51:36 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 
 void	freeIdentifiedMap(t_identifiedMap *map, int status)
 {
-	t_identify_index	i = C_IDENTIFY_INDEX;
+	t_index	i = NO_INDEX;
 
-	while (i <= EA_IDENTIFY_INDEX)
+	while (i <= F_INDEX)
 	{
 		if (status & INDEX_TO_STATUS(i))
 			free(map->surfaces[i]);
@@ -106,22 +106,18 @@ static int	identifyArea(char **mapContent, int areaIndex, char ***areaPtr)
 
 int	initIdentification(t_identifiedMap *map, char *mapFileName, char ***area)
 {
-	int const	fd = open(mapFileName, O_RDONLY);
-	if (fd == -1)
-	{
-		printf(ERROR_MSG "Can't open or read the given file\n");
+	t_list	*dataElements;
+
+	dataElements = file_to_lst(mapFileName);
+	if (dataElements == NULL)
 		return FAILURE;
-	}
-
-	t_list	*dataElements = NULL;
-	dataElements = file_to_lst(fd);
-	close(fd);
-
 	char	**mapContent = (char **) lst_to_double_tab(dataElements, NULL);
+	ft_lstclear(&dataElements, NULL);
+	if (mapContent == NULL)
+		return FAILURE;
 	eraseNewlines(mapContent);
 
 	int		status = identifyMap(map, mapContent);
-	ft_lstclear(&dataElements, NULL);
 
 	if (status == COMPLETE_STATUS && map->areaIndex != NOT_FOUND
 		&& identifyArea(mapContent, map->areaIndex, area) == SUCCESS)

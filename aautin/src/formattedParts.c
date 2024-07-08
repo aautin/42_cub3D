@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/02 20:44:32 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/06 20:56:03 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ int	*initAreaxSize(char **area)
 
 static int	arePathsAccessible(char **texturesPaths)
 {
-	t_format_index	i = NO_FORMAT_INDEX;
+	t_index	i = NO_INDEX;
 
-	while (i <= EA_FORMAT_INDEX)
+	while (i <= EA_INDEX)
 	{
 		if (access(texturesPaths[i], F_OK) == -1)
 		{
@@ -56,26 +56,29 @@ static int	arePathsAccessible(char **texturesPaths)
 
 int	initTextureObjs(void *mlx, t_formattedMap *formatMap, t_identifiedMap *identMap)
 {
-	void			*newImage;
-	t_format_index 	i;
+	void	*newImage;
+	t_index i;
+	int	newIndex;
 
-	if (!arePathsAccessible(identMap->surfaces + 2))
+	if (!arePathsAccessible(identMap->surfaces))
 		return FAILURE;
-	i = NO_FORMAT_INDEX;
-	while (i <= EA_FORMAT_INDEX)
+	i = NO_INDEX;
+	newIndex = 0;
+	while (i <= EA_INDEX)
 	{
-		newImage = mlx_xpm_file_to_image(mlx, identMap->surfaces[i + NO_IDENTIFY_INDEX],
-			&formatMap->textureObjsWidth[i], &formatMap->textureObjsHeight[i]);
+		newImage = mlx_xpm_file_to_image(mlx, identMap->surfaces[i],
+			&formatMap->textureObjsWidth[newIndex], &formatMap->textureObjsHeight[newIndex]);
 		if (newImage == NULL)
 		{
-			while (--i >= 0)
-				mlx_destroy_image(mlx, formatMap->textureObjs[i]);
+			while (--newIndex >= 0)
+				mlx_destroy_image(mlx, formatMap->textureObjs[newIndex]);
 			printf("%sAn error occured when turning %s to image\n",
-				ERROR_MSG, identMap->surfaces[i + NO_IDENTIFY_INDEX]);
+				ERROR_MSG, identMap->surfaces[i]);
 			return FAILURE;
 		}
-		formatMap->textureObjs[i] = newImage;
+		formatMap->textureObjs[newIndex] = newImage;
 		i++;
+		newIndex++;
 	}
 	return SUCCESS;
 }
@@ -95,12 +98,12 @@ static int	initCode(t_rgb *codes, char **surfaces, int index)
 				surfaces[index]);
 		return free_double_tab((void **) components, -1), FAILURE;
 	}
-	codes[index].rCode = ft_atoi(components[0]);
-	codes[index].gCode = ft_atoi(components[1]);
-	codes[index].bCode = ft_atoi(components[2]);
-	if (codes[index].rCode != (unsigned char) codes[index].rCode
-		|| codes[index].gCode != (unsigned char) codes[index].gCode
-		|| codes[index].bCode != (unsigned char) codes[index].bCode)
+	codes[index - C_INDEX].rCode = ft_atoi(components[0]);
+	codes[index - C_INDEX].gCode = ft_atoi(components[1]);
+	codes[index - C_INDEX].bCode = ft_atoi(components[2]);
+	if (codes[index - C_INDEX].rCode != (unsigned char) codes[index - C_INDEX].rCode
+		|| codes[index - C_INDEX].gCode != (unsigned char) codes[index - C_INDEX].gCode
+		|| codes[index - C_INDEX].bCode != (unsigned char) codes[index - C_INDEX].bCode)
 	{
 		printf(ERROR_MSG "The %s rgb-code has incorrect values\n",
 				surfaces[index]);
@@ -111,9 +114,9 @@ static int	initCode(t_rgb *codes, char **surfaces, int index)
 
 int	initCodes(t_rgb *codes, char **surfaces)
 {
-	t_identify_index	i = C_IDENTIFY_INDEX;
+	t_index	i = C_INDEX;
 
-	while (i <= F_IDENTIFY_INDEX)
+	while (i <= F_INDEX)
 	{
 		if (initCode(codes, surfaces, i) == FAILURE)
 			return FAILURE;
