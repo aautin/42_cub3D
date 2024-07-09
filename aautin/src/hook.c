@@ -6,15 +6,17 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 19:23:57 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/09 17:51:03 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/09 19:57:50 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stdio.h>
 
 #include "cub3D.h"
 #include "mlx.h"
 #include "move.h"
 
-static int	key_press(t_objs *objs)
+static int	mouse_move(t_objs *objs)
 {
 	int	x;
 	int	y;
@@ -29,7 +31,7 @@ static int	key_press(t_objs *objs)
 	return (1);
 }
 
-static int	mouse_move(int keycode, t_objs *objs)
+static int	key_press(int keycode, t_objs *objs)
 {
 	if (keycode == XK_Escape)
 		mlx_loop_end(objs->vars->mlx);
@@ -59,5 +61,4 @@ void	init_hooks(t_objs *objs)
 	mlx_hook(objs->vars->win, 2, 1L << 0, &key_press, objs);
 	mlx_hook(objs->vars->win, 17, 0, &cross_button, objs->vars);
 	mlx_loop_hook(objs->vars->mlx, &mouse_move, objs);
-	mlx_loop(objs->vars->mlx);
 }

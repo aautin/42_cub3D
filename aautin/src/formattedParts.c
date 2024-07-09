@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/08 17:46:48 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/09 19:56:09 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,16 @@ int	initTextureObjs(void *mlx, t_map *map, t_identifiedMap *identMap)
 	i = NO_INDEX;
 	while (i <= EA_INDEX)
 	{
-		map->textures[i].obj = mlx_xpm_file_to_image(mlx, identMap->surfaces[i],
-			&map->textures[i].width, &map->textures[i].height);
-		if (map->textures[i].obj == NULL)
+		map->textures[i] = malloc(sizeof(t_data));
+		map->textures[i]->obj = mlx_xpm_file_to_image(mlx, identMap->surfaces[i],
+			&map->textures[i]->width, &map->textures[i]->height);
+		map->textures[i]->addr = (int *) mlx_get_data_addr(map->textures[i]->obj,
+			&map->textures[i]->bits_pixel, &map->textures[i]->line_length,
+			&map->textures[i]->endian);
+		if (map->textures[i]->obj == NULL)
 		{
 			while (i > NO_INDEX)
-				mlx_destroy_image(mlx, map->textures[--i].obj);
+				mlx_destroy_image(mlx, map->textures[--i]->obj);
 			printf("%sAn error occured when turning %s to image\n",
 				ERROR_MSG, identMap->surfaces[i]);
 			return FAILURE;

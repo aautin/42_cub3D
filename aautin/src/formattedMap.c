@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/08 17:16:20 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/09 19:33:26 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 #include "map.h"
 #include "mlx.h"
 
-void	free_textures(void *mlx, t_data textures[])
+void	free_textures(void *mlx, t_data *textures[])
 {
 	t_index	i = NO_INDEX;
 
 	while (i <= EA_INDEX)
 	{
-		mlx_destroy_image(mlx, textures[i].obj);
+		mlx_destroy_image(mlx, textures[i]->obj);
 		i++;
 	}
 }

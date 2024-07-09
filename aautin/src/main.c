@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/09 17:46:27 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/09 19:35:52 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	main(int argc, char **argv)
 	if (init_objs(objs, vars, player, map) == FAILURE)
 	{
 		free_map(vars->mlx, map);
-		free_vars(vars); 
+		free_vars(vars);
 		return EXIT_FAILURE;
 	}
 
