@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/08 18:56:46 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/09 17:46:27 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,27 +44,27 @@ int	main(int argc, char **argv)
 	if (checkArgv(argc, argv) == FAILURE)
 		return EXIT_FAILURE;
 
-	t_vars vars;
-	if (init_vars(&vars) == FAILURE)
+	t_vars *vars = malloc(sizeof(t_vars));
+	if (init_vars(vars) == FAILURE)
 		return EXIT_FAILURE;
 
-	t_player player;
-	t_map map;
-	if (initFormattedMap(vars.mlx, &map, argv[1], &player) == FAILURE)
+	t_player *player = malloc(sizeof(t_player));
+	t_map *map = malloc(sizeof(t_map));
+	if (initFormattedMap(vars->mlx, map, argv[1], player) == FAILURE)
 	{
-		free_vars(&vars);
+		free_vars(vars);
 		return EXIT_FAILURE;
 	}
 
-	t_objs objs;
-	if (init_objs(&objs, &vars, &player, &map) == FAILURE)
+	t_objs *objs = malloc(sizeof(t_objs));
+	if (init_objs(objs, vars, player, map) == FAILURE)
 	{
-		free_map(vars.mlx, &map);
-		free_vars(&vars); 
+		free_map(vars->mlx, map);
+		free_vars(vars); 
 		return EXIT_FAILURE;
 	}
 
-	// ... include enorie's part there.
-	free_objs(&objs);
+	init_hooks(objs);
+	mlx_loop(vars->mlx);
 	return EXIT_SUCCESS;
 }

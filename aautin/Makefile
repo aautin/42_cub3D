@@ -26,8 +26,12 @@ MLX_NAME	:=	mlx
 SRC_FILES	:=	\
 				main.c				\
 				formattedArea.c		\
-				cub3D.c	\
-				player.c	\
+				hook.c				\
+				move.c				\
+				cub3D.c				\
+				utils.c				\
+				raycasting.c		\
+				player.c			\
 				formattedParts.c	\
 				formattedMap.c		\
 				identifiedLine.c	\
@@ -41,10 +45,10 @@ DEP			:=	$(OBJ:.o=.d)
 
 # ---------------------------------------- #
 CC			:=	cc
-CFLAGS		:=	-Wall -Werror -Wextra -g3 -MMD -MP
+CFLAGS		:=	-Wall -Werror -Wextra -g3 -MMD -MP 
 RM			:=	rm -rf
 LDFLAGS		:=	-L$(LIBFT_PATH) -L$(MLX_PATH) 
-LDLIBS		:=	-l$(LIBFT_NAME)  -l$(MLX_NAME) -lXext -lX11
+LDLIBS		:=	-l$(LIBFT_NAME)  -l$(MLX_NAME) -lXext -lX11 -lm
 # ---------------------------------------- #
 $(NAME)			:	$(MLX) $(LIBFT) $(OBJ_PATH) $(OBJ)
 					@$(CC) $(OBJ) -o $@ $(LDFLAGS) $(LDLIBS)
