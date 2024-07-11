@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/11 14:07:57 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/11 14:32:19 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,13 @@
 #include "map.h"
 #include "mlx.h"
 
-void	free_textures(void *mlx, t_data *textures[])
+void	free_textures(void *mlx, t_data *textures[], int start, int end)
 {
-	t_index	i = NO_INDEX;
-
-	while (i <= EA_INDEX)
+	while (start <= end)
 	{
-		mlx_destroy_image(mlx, textures[i]->obj);
-		free(textures[i]);
-		i++;
+		mlx_destroy_image(mlx, textures[start]->obj);
+		free(textures[start]);
+		start++;
 	}
 }
 
@@ -48,7 +46,7 @@ void	cleanArea(char **area, int *xSize)
 void	free_map(void *mlx, t_map *map)
 {
 	free_double_tab((void **) map->area, -1);
-	free_textures(mlx, map->textures);
+	free_textures(mlx, map->textures, NO_INDEX, EA_INDEX);
 	free(map);
 }
 
@@ -74,7 +72,7 @@ int	initFormattedMap(void *mlx, t_map *map, char *mapFileName, t_player *player)
 	if (initArea(map, player) == FAILURE)
 	{
 		free_double_tab((void **) map->area, -1);
-		free_textures(mlx, map->textures);
+		free_textures(mlx, map->textures, NO_INDEX, EA_INDEX);
 		freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS);
 		return FAILURE;
 	}

@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/09 19:56:09 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/11 14:38:12 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	arePathsAccessible(char **texturesPaths)
 
 int	initTextureObjs(void *mlx, t_map *map, t_identifiedMap *identMap)
 {
-	t_index i;
+	int i;
 
 	if (!arePathsAccessible(identMap->surfaces))
 		return FAILURE;
@@ -64,19 +64,22 @@ int	initTextureObjs(void *mlx, t_map *map, t_identifiedMap *identMap)
 	while (i <= EA_INDEX)
 	{
 		map->textures[i] = malloc(sizeof(t_data));
+		if (map->textures[i] == NULL)
+		{
+			free_textures(mlx, map->textures, NO_INDEX, i - 1);
+			return perror("initTextureObjs():malloc()"), FAILURE;
+		}
 		map->textures[i]->obj = mlx_xpm_file_to_image(mlx, identMap->surfaces[i],
 			&map->textures[i]->width, &map->textures[i]->height);
+		if (map->textures[i]->obj == NULL)
+		{
+			free(map->textures[i]);
+			free_textures(mlx, map->textures, NO_INDEX, i - 1);
+			return perror("initTextureObjs():mlx_xpm_file_to_image()"), FAILURE;
+		}
 		map->textures[i]->addr = (int *) mlx_get_data_addr(map->textures[i]->obj,
 			&map->textures[i]->bits_pixel, &map->textures[i]->line_length,
 			&map->textures[i]->endian);
-		if (map->textures[i]->obj == NULL)
-		{
-			while (i > NO_INDEX)
-				mlx_destroy_image(mlx, map->textures[--i]->obj);
-			printf("%sAn error occured when turning %s to image\n",
-				ERROR_MSG, identMap->surfaces[i]);
-			return FAILURE;
-		}
 		i++;
 	}
 	return SUCCESS;
