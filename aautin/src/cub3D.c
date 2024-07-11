@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 14:44:56 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/09 19:48:52 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/11 12:09:22 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,5 @@ void	ft_cub3d(t_objs *objs)
 	}
 	mlx_put_image_to_window(objs->vars->mlx, objs->vars->win,
 		objs->data->obj, 0, 0);
+	mlx_destroy_image(objs->vars->mlx, objs->data->obj);
 }
