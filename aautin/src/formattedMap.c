@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/09 19:33:26 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/11 14:07:57 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	free_textures(void *mlx, t_data *textures[])
 	while (i <= EA_INDEX)
 	{
 		mlx_destroy_image(mlx, textures[i]->obj);
+		free(textures[i]);
 		i++;
 	}
 }
@@ -48,6 +49,7 @@ void	free_map(void *mlx, t_map *map)
 {
 	free_double_tab((void **) map->area, -1);
 	free_textures(mlx, map->textures);
+	free(map);
 }
 
 int	initFormattedMap(void *mlx, t_map *map, char *mapFileName, t_player *player)

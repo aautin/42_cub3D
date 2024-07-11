@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 14:44:56 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/11 12:28:11 by root             ###   ########.fr       */
+/*   Updated: 2024/07/11 14:14:08 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	free_vars(t_vars *vars)
 	mlx_destroy_window(vars->mlx, vars->win);
 	mlx_destroy_display(vars->mlx);
 	free(vars->mlx);
+	free(vars);
 }
 
 int	init_objs(t_objs *objs, t_vars *vars, t_player *player, t_map *map)
@@ -52,20 +53,24 @@ int	init_objs(t_objs *objs, t_vars *vars, t_player *player, t_map *map)
 	objs->player = player;
 	objs->map = map;
 	objs->data = malloc(sizeof(t_data));
-	// printf("%p: %d\n", objs->data->addr, *(objs->data->addr));
-	objs->rc = malloc(sizeof(t_raycasting));
-  objs->data->obj = mlx_new_image(objs->vars->mlx, objs->vars->sizex,
-			objs->vars->sizey);
+	objs->data->obj = mlx_new_image(objs->vars->mlx, objs->vars->sizex,
+		objs->vars->sizey);
 	objs->data->addr = (int *)mlx_get_data_addr(objs->data->obj,
-			&objs->data->bits_pixel, &objs->data->line_length,
-			&objs->data->endian);
+		&objs->data->bits_pixel, &objs->data->line_length,
+		&objs->data->endian);
+	objs->rc = malloc(sizeof(t_raycasting));
 	return SUCCESS;
 }
 
 void	free_objs(t_objs *objs)
 {
+	mlx_destroy_image(objs->vars->mlx, objs->data->obj);
 	free_map(objs->vars->mlx, objs->map);
 	free_vars(objs->vars);
+	free(objs->rc);
+	free(objs->data);
+	free(objs->player);
+	free(objs);
 }
 
 void	ft_cub3d(t_objs *objs)
