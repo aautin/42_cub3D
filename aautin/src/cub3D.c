@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 14:44:56 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/11 12:09:22 by root             ###   ########.fr       */
+/*   Updated: 2024/07/11 12:28:11 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,11 @@ int	init_objs(t_objs *objs, t_vars *vars, t_player *player, t_map *map)
 	objs->data = malloc(sizeof(t_data));
 	// printf("%p: %d\n", objs->data->addr, *(objs->data->addr));
 	objs->rc = malloc(sizeof(t_raycasting));
+  objs->data->obj = mlx_new_image(objs->vars->mlx, objs->vars->sizex,
+			objs->vars->sizey);
+	objs->data->addr = (int *)mlx_get_data_addr(objs->data->obj,
+			&objs->data->bits_pixel, &objs->data->line_length,
+			&objs->data->endian);
 	return SUCCESS;
 }
 
@@ -67,11 +72,6 @@ void	ft_cub3d(t_objs *objs)
 {
 	int	x;
 
-	objs->data->obj = mlx_new_image(objs->vars->mlx, objs->vars->sizex,
-			objs->vars->sizey);
-	objs->data->addr = (int *)mlx_get_data_addr(objs->data->obj,
-			&objs->data->bits_pixel, &objs->data->line_length,
-			&objs->data->endian);
 	x = 0;
 	while (x < objs->vars->sizex)
 	{
@@ -85,5 +85,4 @@ void	ft_cub3d(t_objs *objs)
 	}
 	mlx_put_image_to_window(objs->vars->mlx, objs->vars->win,
 		objs->data->obj, 0, 0);
-	mlx_destroy_image(objs->vars->mlx, objs->data->obj);
 }
