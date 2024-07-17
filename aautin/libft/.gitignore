@@ -1,7 +1,0 @@
-main.c
-*.out
-unitest
-war
-trip
-*.o
-libft.a
