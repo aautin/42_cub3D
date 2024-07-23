@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/11 14:53:11 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/23 20:42:06 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,22 @@
 #include "player.h"
 #include "cub3D.h"
 
-static int	checkArgv(int argc, char **argv)
+static int	check_argv(int argc, char **argv)
 {
+	char *file_extension;
+
 	if (argc != 2)
 	{
 		printf(ERROR_MSG "Wrong number of arguments\n");
 		return FAILURE;
 	}
-
-	char *fileExtension = ft_strrchr(argv[1], '.');
-	if (fileExtension == argv[1] || fileExtension == NULL)
+	file_extension = ft_strrchr(argv[1], '.');
+	if (file_extension == argv[1] || file_extension == NULL)
 	{
 		printf(ERROR_MSG "File name is incorrect\n");
 		return FAILURE;
 	}
-	if (ft_strncmp(fileExtension, ".cub", 5) != 0)
+	if (ft_strncmp(file_extension, ".cub", 5) != 0)
 	{
 		printf(ERROR_MSG "File name has a wrong extension\n");
 		return FAILURE;
@@ -48,7 +49,7 @@ static void	free_ptr_allocations(t_objs *objs, t_map *map, t_player *player)
 
 int	main(int argc, char **argv)
 {
-	if (checkArgv(argc, argv) == FAILURE)
+	if (check_argv(argc, argv) == FAILURE)
 		return EXIT_FAILURE;
 
 	t_objs *objs = malloc(sizeof(t_objs));

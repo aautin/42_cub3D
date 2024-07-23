@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/06 20:51:36 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/24 00:54:56 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,12 @@ static int	identifyArea(char **mapContent, int areaIndex, char ***areaPtr)
 
 int	initIdentification(t_identifiedMap *map, char *mapFileName, char ***area)
 {
-	t_list	*dataElements;
+	t_list		*dataElements;
+	int const	fd = open_fd(mapFileName);
 
-	dataElements = file_to_lst(mapFileName);
+	if (fd == -1)
+		return FAILURE;
+	dataElements = fd_to_lst(fd);
 	if (dataElements == NULL)
 		return FAILURE;
 	char	**mapContent = (char **) lst_to_double_tab(dataElements, NULL);
