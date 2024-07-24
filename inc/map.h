@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/11 14:31:42 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/24 03:37:58 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include "libft.h"
 # include "player.h"
 
-# define INDEX_TO_STATUS(index) (1 << (index))
 # define NOT_FOUND -1
 # define COMPLETE_STATUS 0b111111
 # define ERROR_MSG "Error\n"
@@ -32,10 +31,10 @@ typedef enum e_index {
 	SHIFT = C_INDEX
 }	t_index;
 
-typedef struct s_identifiedMap {
+typedef struct s_identified_map {
 	char	*surfaces[6];
-	int		areaIndex;
-}	t_identifiedMap;
+	int		area_index;
+}	t_identified_map;
 
 typedef struct s_map {
 	t_data	*textures[4];
@@ -43,29 +42,30 @@ typedef struct s_map {
 	char	**area;
 }	t_map;
 
-// identifyLine
-int		isAreaBeginning(char *line);
-int		identifyLine(t_identifiedMap *map, char *line, int lineIndex,
+// identify_line
+int		is_area_beginning(char *line);
+int		identify_line(t_identified_map *map, char *line, int line_index,
 			int status);
 
 // identifyMap
-void	freeIdentifiedMap(t_identifiedMap *map, int status);
-int		initIdentification(t_identifiedMap *identifiedMap, char *mapFileName,
-			char ***areaPtr);
+void	free_identified_map(t_identified_map *map, int status);
+int		init_identification(t_identified_map *identified_map,
+			char *map_file_name, char ***areaPtr);
 
 // formattedArea
-int		initArea(t_map *map, t_player *player);
+int		init_area(t_map *map, t_player *player);
 
 // formattedParts
-int		*initAreaxSize(char **area);
-int		initTextureObjs(void *mlx, t_map *formatMap,
-			t_identifiedMap *identMap);
-int		initCodes(int codes[], char **surfaces);
+int		*init_area_xsize(char **area);
+int		init_texture_objs(void *mlx, t_map *format_map,
+			t_identified_map *ident_map);
+int		init_codes(int codes[], char **surfaces);
 
 // formattedMap
 void	free_textures(void *mlx, t_data *textures[], int start, int end);
-void	cleanArea(char **area, int *xSize);
+void	clean_area(char **area, int *xsize);
 void	free_map(void *mlx, t_map *map);
-int		initFormattedMap(void *mlx, t_map *map, char *mapFileName, t_player *player);
+int		init_formatted_map(void *mlx, t_map *map, char *map_file_name,
+			t_player *player);
 
 #endif

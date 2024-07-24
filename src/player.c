@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 14:31:21 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/08 14:43:43 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/24 01:25:42 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	init_player_from_direction(t_player *player, char direction)
 	else if (direction == 'S')
 	{
 		player->diry = 1;
-		player->planex = -0.66;	
+		player->planex = -0.66;
 	}
 	else if (direction == 'W')
 	{
@@ -60,7 +60,7 @@ void	init_player(t_player *player, char **area)
 				init_player_from_direction(player, area[y][x]);
 				return ;
 			}
-			x++;		
+			x++;
 		}
 		y++;
 	}

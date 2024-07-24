@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 13:15:22 by root              #+#    #+#             */
-/*   Updated: 2024/07/08 19:49:01 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/24 01:25:14 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_move_up(t_objs *objs)
 	if (objs->map->area[(int)objs->player->y][(int)newposx] != '1')
 		objs->player->x = newposx;
 	if (objs->map->area[(int)newposy][(int)objs->player->x] != '1')
-    	objs->player->y = newposy;
+		objs->player->y = newposy;
 	ft_cub3d(objs);
 }
 
@@ -38,7 +38,7 @@ void	ft_move_down(t_objs *objs)
 	if (objs->map->area[(int)objs->player->y][(int)newposx] != '1')
 		objs->player->x = newposx;
 	if (objs->map->area[(int)newposy][(int)objs->player->x] != '1')
-   		objs->player->y = newposy;
+		objs->player->y = newposy;
 	ft_cub3d(objs);
 }
 
@@ -52,7 +52,7 @@ void	ft_move_right(t_objs *objs)
 	if (objs->map->area[(int)objs->player->y][(int)newposx] != '1')
 		objs->player->x = newposx;
 	if (objs->map->area[(int)newposy][(int)objs->player->x] != '1')
-    	objs->player->y = newposy;
+		objs->player->y = newposy;
 	ft_cub3d(objs);
 }
 
@@ -66,7 +66,7 @@ void	ft_move_left(t_objs *objs)
 	if (objs->map->area[(int)objs->player->y][(int)newposx] != '1')
 		objs->player->x = newposx;
 	if (objs->map->area[(int)newposy][(int)objs->player->x] != '1')
-    	objs->player->y = newposy;
+		objs->player->y = newposy;
 	ft_cub3d(objs);
 }
 

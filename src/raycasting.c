@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 20:02:26 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/09 17:26:20 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/24 01:24:42 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ void	ft_raycast4(t_raycasting *rc, t_objs *objs)
 	else
 		rc->wallx = objs->player ->x + rc->perpwalldist * rc->raydirx;
 	rc->wallx -= floor(rc->wallx);
-	rc->texture = ft_find_texture(rc->side, rc->raydirx, rc->raydiry, objs->map);
+	rc->texture = ft_find_texture(rc->side, rc->raydirx, rc->raydiry,
+			objs->map);
 	rc->texx = (int)(rc->wallx * (double)rc->texture->width);
 	if ((rc->side == 0 && rc->raydirx > 0)
 		|| (rc->side == 1 && rc->raydiry < 0))
@@ -116,7 +117,8 @@ void	ft_draw(t_raycasting *rc, t_objs *objs, int x)
 	y = 0;
 	while (y < rc->drawstart)
 	{
-		objs->data->addr[y * objs->vars->sizex + x] = objs->map->codes[C_INDEX - SHIFT];
+		objs->data->addr[y * objs->vars->sizex + x] = objs->map->codes[C_INDEX
+			- SHIFT];
 		y++;
 	}
 	while (y < rc->drawend)
@@ -129,7 +131,8 @@ void	ft_draw(t_raycasting *rc, t_objs *objs, int x)
 	}
 	while (y < objs->vars->sizey)
 	{
-		objs->data->addr[y * objs->vars->sizex + x] = objs->map->codes[F_INDEX - SHIFT];
+		objs->data->addr[y * objs->vars->sizex + x] = objs->map->codes[F_INDEX
+			- SHIFT];
 		y++;
 	}
 }

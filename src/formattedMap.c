@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/11 14:32:19 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/24 01:22:50 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,16 @@ void	free_textures(void *mlx, t_data *textures[], int start, int end)
 	}
 }
 
-void	cleanArea(char **area, int *xSize)
+void	clean_area(char **area, int *xsize)
 {
-	int	x, y;
+	int	x;
+	int	y;
 
 	y = 0;
 	while (area[y] != NULL)
 	{
 		x = 0;
-		while (x < xSize[y])
+		while (x < xsize[y])
 		{
 			if (ft_strchr(" TNSWE", area[y][x]) != NULL)
 				area[y][x] = '0';
@@ -50,31 +51,32 @@ void	free_map(void *mlx, t_map *map)
 	free(map);
 }
 
-int	initFormattedMap(void *mlx, t_map *map, char *mapFileName, t_player *player)
+int	init_formatted_map(void *mlx, t_map *map, char *map_file_name,
+		t_player *player)
 {
-	t_identifiedMap identifiedMap;
+	t_identified_map	identified_map;
 
-	identifiedMap.areaIndex = NOT_FOUND;
-	if (initIdentification(&identifiedMap, mapFileName, &map->area) == FAILURE)
-		return FAILURE;
-	if (initCodes(map->codes, identifiedMap.surfaces) == FAILURE)
+	identified_map.area_index = NOT_FOUND;
+	if (init_identification(&identified_map, map_file_name,
+			&map->area) == FAILURE)
+		return (FAILURE);
+	if (init_codes(map->codes, identified_map.surfaces) == FAILURE)
 	{
 		free_double_tab((void **) map->area, -1);
-		freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS);
-		return FAILURE;
+		return (free_identified_map(&identified_map, COMPLETE_STATUS), FAILURE);
 	}
-	if (initTextureObjs(mlx, map, &identifiedMap) == FAILURE)
+	if (init_texture_objs(mlx, map, &identified_map) == FAILURE)
 	{
 		free_double_tab((void **) map->area, -1);
-		freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS);
-		return FAILURE;
+		free_identified_map(&identified_map, COMPLETE_STATUS);
+		return (FAILURE);
 	}
-	if (initArea(map, player) == FAILURE)
+	if (init_area(map, player) == FAILURE)
 	{
 		free_double_tab((void **) map->area, -1);
 		free_textures(mlx, map->textures, NO_INDEX, EA_INDEX);
-		freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS);
-		return FAILURE;
+		free_identified_map(&identified_map, COMPLETE_STATUS);
+		return (FAILURE);
 	}
-	return freeIdentifiedMap(&identifiedMap, COMPLETE_STATUS), SUCCESS;
+	return (free_identified_map(&identified_map, COMPLETE_STATUS), SUCCESS);
 }

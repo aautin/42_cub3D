@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:24:21 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/08 17:31:18 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/24 04:37:11 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,95 +40,101 @@ static int	check_player(char **area)
 	if (!player)
 	{
 		printf(ERROR_MSG "Map has no player\n");
-		return FAILURE;
+		return (FAILURE);
 	}
-	return SUCCESS;
+	return (SUCCESS);
 }
 
-static int	floodchar(int *xSize, char **area, int lineI, int colI)
+static int	floodchar(int *xsize, char **area, int line, int col)
 {
-	int	status = FAILURE;
+	int	status;
+	int	step;
 
-	if (lineI - 1 < 0 || xSize[lineI - 1] - 1 < colI 
-		|| area[lineI + 1] == NULL || xSize[lineI + 1] - 1 < colI
-		|| colI - 1 < 0 || area[lineI][colI + 1] == '\0')
-		return NOT_FOUND;
-	for (int step = -1; step <= 1; step += 2)
+	status = FAILURE;
+	if (line == 0 || col == 0 || xsize[line - 1] - 1 < col || !area[line + 1]
+		|| xsize[line + 1] - 1 < col || area[line][col + 1] == '\0')
+		return (NOT_FOUND);
+	step = -1;
+	while (step <= 1)
 	{
-		if (area[lineI + step][colI] && ft_strchr("0 ", area[lineI + step][colI]) != NULL)
+		if (area[line + step][col] && ft_strchr("0 ", area[line + step][col]))
 		{
 			status = SUCCESS;
-			area[lineI + step][colI] = 'T';
+			area[line + step][col] = 'T';
 		}
-	}
-	for (int step = -1; step <= 1; step += 2)
-	{
-		if (area[lineI + step][colI] && ft_strchr("0 ", area[lineI][colI + step]) != NULL)
+		if (area[line][col + step] && ft_strchr("0 ", area[line][col + step]))
 		{
 			status = SUCCESS;
-			area[lineI][colI + step] = 'T';
+			area[line][col + step] = 'T';
 		}
+		step += 2;
 	}
-	return status;
+	return (status);
 }
 
-static int	floodline(t_map *map, int lineI, int *expansion, int *xSize)
+static int	floodline(t_map *map, int line_i, int *expansion, int *xsize)
 {
-	int	colI = 0;
+	int	col_i;
+	int	flood_status;
 
-	while (map->area[lineI][colI] != '\0')
+	col_i = 0;
+	while (map->area[line_i][col_i] != '\0')
 	{
-		if (ft_strchr("NSWET", map->area[lineI][colI]) != NULL)
+		if (ft_strchr("NSWET", map->area[line_i][col_i]) != NULL)
 		{
-			int	flood_status = floodchar(xSize, map->area, lineI, colI);
+			flood_status = floodchar(xsize, map->area, line_i, col_i);
 			if (flood_status == NOT_FOUND)
 			{
 				printf(ERROR_MSG "Map isn't closed\n");
-				return FAILURE;
+				return (FAILURE);
 			}
-			if (flood_status == EXIT_SUCCESS)
+			else if (flood_status == SUCCESS)
 				*expansion = TRUE;
 		}
-		else if (ft_strchr("10 ", map->area[lineI][colI]) == NULL)
+		else if (ft_strchr("10 ", map->area[line_i][col_i]) == NULL)
 		{
 			printf(ERROR_MSG "Map has wrong chars\n");
-			return FAILURE;
+			return (FAILURE);
 		}
-		colI++;
+		col_i++;
 	}
-	return SUCCESS;
+	return (SUCCESS);
 }
 
-static int	floodfill(t_map *map, int *xSize)
+static int	floodfill(t_map *map, int *xsize)
 {
-	int expansion = TRUE;
+	int	expansion;
+	int	i;
 
+	expansion = TRUE;
 	while (expansion == TRUE)
 	{
 		expansion = FALSE;
-		int	i = 0;
+		i = 0;
 		while (map->area[i] != NULL)
 		{
-			if (floodline(map, i, &expansion, xSize) == FAILURE)
-				return FAILURE;
+			if (floodline(map, i, &expansion, xsize) == FAILURE)
+				return (FAILURE);
 			i++;
 		}
 	}
-	return SUCCESS;
+	return (SUCCESS);
 }
 
-int	initArea(t_map *map, t_player *player)
+int	init_area(t_map *map, t_player *player)
 {
-	int *xSize = initAreaxSize(map->area);
-	if (xSize == NULL)
-		return EXIT_FAILURE;
-	if (floodfill(map, xSize) == SUCCESS && check_player(map->area) == SUCCESS)
+	int	*xsize;
+
+	xsize = init_area_xsize(map->area);
+	if (xsize == NULL)
+		return (FAILURE);
+	if (floodfill(map, xsize) == SUCCESS && check_player(map->area) == SUCCESS)
 	{
 		init_player(player, map->area);
-		cleanArea(map->area, xSize);
-		free(xSize);
-		return SUCCESS;
+		clean_area(map->area, xsize);
+		free(xsize);
+		return (SUCCESS);
 	}
-	free(xSize);
-	return FAILURE;
+	free(xsize);
+	return (FAILURE);
 }

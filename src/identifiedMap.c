@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/24 00:54:56 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/24 04:09:22 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,22 @@
 
 #include "libft.h"
 #include "map.h"
+#include "utils.h"
 
-void	freeIdentifiedMap(t_identifiedMap *map, int status)
+void	free_identified_map(t_identified_map *map, int status)
 {
-	t_index	i = NO_INDEX;
+	t_index	i;
 
+	i = NO_INDEX;
 	while (i <= F_INDEX)
 	{
-		if (status & INDEX_TO_STATUS(i))
+		if (status & index_to_status(i))
 			free(map->surfaces[i]);
 		i++;
 	}
 }
 
-static void	eraseNewlines(char **lines)
+static void	erase_newlines(char **lines)
 {
 	int	i;
 	int	j;
@@ -51,9 +53,9 @@ static void	eraseNewlines(char **lines)
 	}
 }
 
-static int	identifyMap(t_identifiedMap *map, char **lines)
+static int	identify_map(t_identified_map *map, char **lines)
 {
-	int	newStatus;
+	int	new_status;
 	int	status;
 	int	i;
 
@@ -61,72 +63,73 @@ static int	identifyMap(t_identifiedMap *map, char **lines)
 	i = 0;
 	while (lines[i] != NULL)
 	{
-		if (isAreaBeginning(lines[i]))
+		if (is_area_beginning(lines[i]))
 		{
-			map->areaIndex = i;
-			break;
+			map->area_index = i;
+			break ;
 		}
-		newStatus = identifyLine(map, lines[i], i, status);
-		if (newStatus == NOT_FOUND)
-			return status;
-		status |= newStatus;
+		new_status = identify_line(map, lines[i], i, status);
+		if (new_status == NOT_FOUND)
+			return (status);
+		status |= new_status;
 		i++;
 	}
-	if (status != COMPLETE_STATUS || map->areaIndex == NOT_FOUND)
+	if (status != COMPLETE_STATUS || map->area_index == NOT_FOUND)
 		printf(ERROR_MSG "The file given is incomplete or in disorder\n");
-	return status;
+	return (status);
 }
 
-static int	identifyArea(char **mapContent, int areaIndex, char ***areaPtr)
+static int	identify_area(char **map_content, int area_index, char ***areaPtr)
 {
-	char	**newPtr;
-	int		areaSize = 0;
+	char	**new_ptr;
+	int		area_size;
 
-	while (mapContent[areaIndex + areaSize] != NULL)
-		areaSize++;
-	newPtr = malloc((areaSize + 1) * sizeof(char *));
-	if (newPtr == NULL)
+	area_size = 0;
+	while (map_content[area_index + area_size] != NULL)
+		area_size++;
+	new_ptr = malloc((area_size + 1) * sizeof(char *));
+	if (new_ptr == NULL)
 	{
-		perror("identifyArea():malloc()");
-		return FAILURE;
+		perror("identify_area():malloc()");
+		return (FAILURE);
 	}
-	areaSize = 0;
-	while (mapContent[areaIndex + areaSize] != NULL)
+	area_size = 0;
+	while (map_content[area_index + area_size] != NULL)
 	{
-		newPtr[areaSize] = mapContent[areaIndex + areaSize];
-		areaSize++;
+		new_ptr[area_size] = map_content[area_index + area_size];
+		area_size++;
 	}
-	newPtr[areaSize] = NULL;
-	while (areaIndex-- > 0)
-		free(mapContent[areaIndex]);
-	free(mapContent);
-	*areaPtr = newPtr;
-	return SUCCESS;
+	new_ptr[area_size] = NULL;
+	while (area_index-- > 0)
+		free(map_content[area_index]);
+	free(map_content);
+	*areaPtr = new_ptr;
+	return (SUCCESS);
 }
 
-int	initIdentification(t_identifiedMap *map, char *mapFileName, char ***area)
+int	init_identification(t_identified_map *map, char *map_file_name,
+	char ***area)
 {
-	t_list		*dataElements;
-	int const	fd = open_fd(mapFileName);
+	t_list		*data_elements;
+	int const	fd = open_fd(map_file_name);
+	int			status;
+	char		**map_content;
 
 	if (fd == -1)
-		return FAILURE;
-	dataElements = fd_to_lst(fd);
-	if (dataElements == NULL)
-		return FAILURE;
-	char	**mapContent = (char **) lst_to_double_tab(dataElements, NULL);
-	ft_lstclear(&dataElements, NULL);
-	if (mapContent == NULL)
-		return FAILURE;
-	eraseNewlines(mapContent);
-
-	int		status = identifyMap(map, mapContent);
-
-	if (status == COMPLETE_STATUS && map->areaIndex != NOT_FOUND
-		&& identifyArea(mapContent, map->areaIndex, area) == SUCCESS)
-		return SUCCESS;
-
-	free_double_tab((void **) mapContent, -1);
-	freeIdentifiedMap(map, status);
-	return FAILURE;
+		return (FAILURE);
+	data_elements = fd_to_lst(fd);
+	if (data_elements == NULL)
+		return (FAILURE);
+	map_content = (char **) lst_to_double_tab(data_elements, NULL);
+	ft_lstclear(&data_elements, NULL);
+	if (map_content == NULL)
+		return (FAILURE);
+	erase_newlines(map_content);
+	status = identify_map(map, map_content);
+	if (status == COMPLETE_STATUS && map->area_index != NOT_FOUND
+		&& identify_area(map_content, map->area_index, area) == SUCCESS)
+		return (SUCCESS);
+	free_double_tab((void **) map_content, -1);
+	free_identified_map(map, status);
+	return (FAILURE);
 }

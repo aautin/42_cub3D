@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 14:44:56 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/11 14:14:08 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/24 01:23:04 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	init_vars(t_vars *vars)
 	if (vars->mlx == NULL)
 	{
 		perror("init_vars():mlx_init()");
-		return FAILURE;
+		return (FAILURE);
 	}
 	mlx_get_screen_size(vars->mlx, &vars->sizex, &vars->sizey);
 	vars->win = mlx_new_window(vars->mlx, vars->sizex, vars->sizey, "Cub3D");
@@ -34,9 +34,9 @@ int	init_vars(t_vars *vars)
 		mlx_destroy_display(vars->mlx);
 		free(vars->mlx);
 		perror("init_vars():mlx_new_window()");
-		return FAILURE;
+		return (FAILURE);
 	}
-	return SUCCESS;
+	return (SUCCESS);
 }
 
 void	free_vars(t_vars *vars)
@@ -54,12 +54,12 @@ int	init_objs(t_objs *objs, t_vars *vars, t_player *player, t_map *map)
 	objs->map = map;
 	objs->data = malloc(sizeof(t_data));
 	objs->data->obj = mlx_new_image(objs->vars->mlx, objs->vars->sizex,
-		objs->vars->sizey);
+			objs->vars->sizey);
 	objs->data->addr = (int *)mlx_get_data_addr(objs->data->obj,
-		&objs->data->bits_pixel, &objs->data->line_length,
-		&objs->data->endian);
+			&objs->data->bits_pixel, &objs->data->line_length,
+			&objs->data->endian);
 	objs->rc = malloc(sizeof(t_raycasting));
-	return SUCCESS;
+	return (SUCCESS);
 }
 
 void	free_objs(t_objs *objs)
