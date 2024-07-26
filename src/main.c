@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 23:44:49 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/26 07:15:36 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/26 07:18:37 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ static int	check_argv(int argc, char **argv)
 	return ((SUCCESS));
 }
 
-static void	free_ptr_allocations(t_vars *vars, t_objs *objs, t_map *map, t_player *player)
+static void	free_ptr_allocations(t_vars *vars, t_objs *objs, t_map *map,
+	t_player *player)
 {
 	if (vars != NULL && vars->mlx != NULL)
 	{
@@ -58,7 +59,8 @@ static void	free_ptr_allocations(t_vars *vars, t_objs *objs, t_map *map, t_playe
 	player = NULL;
 }
 
-static void	ptr_allocations(t_vars **vars, t_objs **objs, t_map **map, t_player **player)
+static void	ptr_allocations(t_vars **vars, t_objs **objs, t_map **map,
+	t_player **player)
 {
 	*objs = malloc(sizeof(t_objs));
 	*map = malloc(sizeof(t_map));
@@ -89,7 +91,7 @@ int	main(int argc, char **argv)
 		return (free_ptr_allocations(vars, objs, map, player), EXIT_FAILURE);
 	if (init_vars(vars) == FAILURE)
 		return (free_map(vars->mlx, map), free_ptr_allocations(vars, objs, map,
-			player), EXIT_FAILURE);
+				player), EXIT_FAILURE);
 	if (init_objs(objs, vars, player, map) == FAILURE)
 		return (free_map(vars->mlx, map), free_vars(vars), EXIT_FAILURE);
 	init_hooks(objs);
