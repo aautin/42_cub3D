@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 14:44:56 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/24 01:23:04 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/26 06:59:44 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,6 @@
 
 int	init_vars(t_vars *vars)
 {
-	vars->mlx = mlx_init();
-	if (vars->mlx == NULL)
-	{
-		perror("init_vars():mlx_init()");
-		return (FAILURE);
-	}
 	mlx_get_screen_size(vars->mlx, &vars->sizex, &vars->sizey);
 	vars->win = mlx_new_window(vars->mlx, vars->sizex, vars->sizey, "Cub3D");
 	if (vars->win == NULL)
