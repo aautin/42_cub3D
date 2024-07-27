@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/24 03:37:58 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/27 16:56:41 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int		init_identification(t_identified_map *identified_map,
 int		init_area(t_map *map, t_player *player);
 
 // formattedParts
-int		*init_area_xsize(char **area);
+int		*init_area_xsize(char **area, int *xsize);
 int		init_texture_objs(void *mlx, t_map *format_map,
 			t_identified_map *ident_map);
 int		init_codes(int codes[], char **surfaces);

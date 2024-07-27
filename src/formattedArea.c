@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 19:24:21 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/24 04:37:11 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/27 16:55:38 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "libft.h"
 #include "map.h"
 #include "player.h"
+#include "utils.h"
 
 static int	check_player(char **area)
 {
@@ -124,10 +125,17 @@ static int	floodfill(t_map *map, int *xsize)
 int	init_area(t_map *map, t_player *player)
 {
 	int	*xsize;
+	int	sizetab;
 
-	xsize = init_area_xsize(map->area);
+	xsize = init_area_xsize(map->area, &sizetab);
 	if (xsize == NULL)
 		return (FAILURE);
+	if (check_lines_lenght(xsize, sizetab) == FAILURE)
+	{
+		printf(ERROR_MSG "Map contains empty line\n");
+		free(xsize);
+		return (FAILURE);
+	}
 	if (floodfill(map, xsize) == SUCCESS && check_player(map->area) == SUCCESS)
 	{
 		init_player(player, map->area);

@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 20:05:28 by root              #+#    #+#             */
-/*   Updated: 2024/07/24 03:38:12 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/27 16:54:46 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,22 @@ t_data	*ft_find_texture(int side, double raydirx, double raydiry, t_map *map)
 		return (map->textures[EA_INDEX]);
 	else
 		return (map->textures[WE_INDEX]);
+}
+
+int	check_lines_lenght(int *xsize, int sizetab)
+{
+	int	i;
+	int	found;
+
+	i = 0;
+	found = FALSE;
+	while (i < sizetab)
+	{
+		if (xsize[i] <= 0 && !found)
+			found = TRUE;
+		else if (xsize[i] <= 0)
+			return (FAILURE);
+		i ++;
+	}
+	return (SUCCESS);
 }

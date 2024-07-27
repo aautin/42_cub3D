@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 19:23:57 by aautin            #+#    #+#             */
-/*   Updated: 2024/07/11 12:14:36 by root             ###   ########.fr       */
+/*   Updated: 2024/07/27 17:00:38 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static int	mouse_move(t_objs *objs)
 	int	y;
 
 	mlx_mouse_get_pos(objs->vars->mlx, objs->vars->win, &x, &y);
-	if (x > objs->vars->sizex / 2 + 10)
+	if (x > objs->vars->sizex / 2 + 1)
 		ft_rotate(0.07, objs);
-	if (x < objs->vars->sizex / 2 - 10)
+	if (x < objs->vars->sizex / 2 - 1)
 		ft_rotate(-0.07, objs);
 	mlx_mouse_move(objs->vars->mlx, objs->vars->win,
 		objs->vars->sizex / 2, objs->vars->sizey / 2);

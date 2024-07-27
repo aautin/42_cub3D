@@ -6,7 +6,7 @@
 /*   By: aautin <aautin@student.42.fr >             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 23:37:02 by alexandre         #+#    #+#             */
-/*   Updated: 2024/07/24 04:38:29 by aautin           ###   ########.fr       */
+/*   Updated: 2024/07/27 16:40:40 by aautin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "map.h"
 #include "mlx.h"
 
-int	*init_area_xsize(char **area)
+int	*init_area_xsize(char **area, int *sizetab)
 {
 	int	i;
 	int	*xsize;
@@ -25,6 +25,7 @@ int	*init_area_xsize(char **area)
 	while (area[i] != NULL)
 		i++;
 	xsize = malloc(i * sizeof(int));
+	*sizetab = i;
 	if (xsize == NULL)
 	{
 		perror("init_area_xsize():malloc()");
